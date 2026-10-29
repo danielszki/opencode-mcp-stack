@@ -1,0 +1,83 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "opencode/beam-free",
+  "plugins": [
+    {
+      "package": "__HOME__/opencode/opencode-mcp-stack/custom/guard",
+      "options": {
+        "mode": "block"
+      }
+    }
+  ],
+  "mcp": {
+    "context7": { "type": "remote", "url": "https://mcp.context7.com/mcp" },
+    "gh_grep": { "type": "remote", "url": "https://mcp.grep.app" },
+    "sentry": { "type": "remote", "url": "https://mcp.sentry.dev/mcp", "oauth": {} },
+    "cloudflare-browser": { "type": "remote", "url": "https://browser.mcp.cloudflare.com/mcp" },
+    "astro-docs": { "type": "remote", "url": "https://mcp.docs.astro.build/mcp" },
+
+    "playwright": {
+      "type": "local",
+      "command": ["node", "__HOME__/.local/share/mcp-node/node_modules/@playwright/mcp/cli.js"]
+    },
+    "css": {
+      "type": "local",
+      "command": ["node", "__HOME__/.local/share/mcp-node/node_modules/css-mcp/src/server.js"]
+    },
+    "chrome-devtools": {
+      "type": "local",
+      "command": ["node", "__HOME__/.local/share/mcp-node/node_modules/chrome-devtools-mcp/build/src/bin/chrome-devtools-mcp.js"]
+    },
+    "filesystem": {
+      "type": "local",
+      "command": ["node", "__HOME__/.local/share/mcp-node/node_modules/@modelcontextprotocol/server-filesystem/dist/index.js", "__HOME__"]
+    },
+    "firecrawl": {
+      "type": "local",
+      "command": ["node", "__HOME__/.local/share/mcp-node/node_modules/firecrawl-mcp/dist/index.js"],
+      "environment": { "FIRECRAWL_API_KEY": "{env:FIRECRAWL_API_KEY}" }
+    },
+
+    "vision": {
+      "type": "local",
+      "command": ["python3", "__HOME__/opencode/opencode-mcp-stack/custom/vision-bridge.py"],
+      "enabled": true,
+      "timeout": 90000
+    },
+
+    "fetch": {
+      "type": "local",
+      "command": ["__HOME__/.local/share/venv-mcp/bin/mcp-server-fetch"],
+      "enabled": true
+    },
+
+    "bgts-context-engine": {
+      "type": "local",
+      "command": ["__HOME__/opencode/bgts-context-engine/.venv/bin/bce", "serve-mcp"],
+      "environment": {
+        "BCE_DB_HOST": "127.0.0.1",
+        "BCE_DB_PORT": "5432",
+        "BCE_DB_NAME": "bce",
+        "BCE_DB_USER": "bce",
+        "BCE_DB_PASSWORD": "bce",
+        "BCE_GRAPH_NAME": "code_graph",
+        "BCE_ENV_FILE": "__HOME__/opencode/bgts-context-engine/.env"
+      },
+      "enabled": true
+    },
+
+    "omnivoice": {
+      "type": "local",
+      "command": [
+        "uv", "--directory", "__HOME__/VoiceStudio", "run", "--group", "cpu", "--no-group", "cuda",
+        "python", "-m", "backend.mcp_server"
+      ],
+      "environment": {
+        "OMNIVOICE_API_URL": "http://127.0.0.1:3900",
+        "OMNIVOICE_TORCH_VARIANT": "cpu",
+        "HF_HOME": "__HOME__/.cache/huggingface"
+      },
+      "enabled": true
+    }
+  }
+}

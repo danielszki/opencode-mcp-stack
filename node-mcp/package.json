@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "@modelcontextprotocol/server-filesystem": "^2026.8.31",
+    "@playwright/mcp": "^0.0.83",
+    "chrome-devtools-mcp": "^1.10.1",
+    "css-mcp": "^1.3.0",
+    "firecrawl-mcp": "^3.29.0",
+    "rea-agents": "^6.4.0"
+  }
+}
