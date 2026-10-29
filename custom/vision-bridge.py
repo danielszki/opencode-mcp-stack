@@ -6,16 +6,19 @@ usa framing Content-Length. Este processo encaminha newline -> CL na entrada e
 CL -> newline na saida, para que ambos se entendam.
 """
 import json
+import os
 import subprocess
 import sys
 
-CHILD = [
-    "/home/mint/.local/share/venv-mcp/bin/python",
-    "/home/mint/.config/opencode/vision-launcher.py",
-]
+HOME = os.path.expanduser("~")
+VISION_PYTHON = os.environ.get("VISION_PYTHON", os.path.join(HOME, ".local/share/venv-mcp/bin/python"))
+VISION_LAUNCHER = os.environ.get("VISION_LAUNCHER", os.path.join(HOME, ".config/opencode/vision-launcher.py"))
+LOG_PATH = os.environ.get("VISION_LOG", os.path.join(HOME, "opencode/.vision-child.log"))
+
+CHILD = [VISION_PYTHON, VISION_LAUNCHER]
 
 child = subprocess.Popen(CHILD, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                         stderr=open("/home/mint/opencode/.vision-child.log", "ab"), bufsize=0)
+                         stderr=open(LOG_PATH, "ab"), bufsize=0)
 out = child.stdout
 
 

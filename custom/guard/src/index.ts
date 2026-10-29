@@ -1,6 +1,7 @@
 import { Plugin } from "@opencode/plugin"
 import { appendFileSync, mkdirSync, readFileSync } from "node:fs"
 import { dirname } from "node:path"
+import { homedir } from "node:os"
 
 type Mode = "block" | "warn"
 
@@ -15,7 +16,7 @@ interface GuardOptions {
   injectNotice?: boolean
 }
 
-const DEFAULT_AUDIT_LOG = "/home/mint/.local/share/opencode/audit/tool-audit.log"
+const DEFAULT_AUDIT_LOG = `${homedir()}/.local/share/opencode/audit/tool-audit.log`
 
 const DEFAULT_EXTENSIONS = [".pem", ".key", ".p12", ".pfx", ".keystore", ".jks", ".ppk", ".asc"]
 
