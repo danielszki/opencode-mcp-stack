@@ -8,6 +8,10 @@ clonado em outra máquina e reinstalado de forma reproduzível.
 - `node-mcp/` — manifestos npm dos MCPs em Node (playwright, chrome-devtools, css, filesystem, firecrawl).
 - `python-mcp/` — `requirements.txt` do venv (vision, fetch, mcp).
 - `custom/` — código próprio: plugin `guard`, `vision-bridge.py`, `vision-launcher.py`.
+- `skills/` — skills do agente no formato OpenCode V2 (`<id>/SKILL.md`). Inclui
+  `webscraping-expert` (cópia integral da skill pública de Gabriel Greco —
+  origem, licença e instalação em `docs/webscraping-expert.md`).
+- `plugins/` — plugins e marketplace.
 - `config/opencode.json.template` — config do OpenCode com placeholders `__HOME__`.
 - `scripts/install.sh` — instala tudo.
 - `scripts/setup-config.sh` — gera `~/.config/opencode/opencode.json`.
