@@ -1,0 +1,136 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "opencode/beam-free",
+  "plugins": [
+    {
+      "package": "/home/mint/Pasta Pessoal/deepai/opencode-mcp-stack/custom/guard",
+      "options": {
+        "mode": "block"
+      }
+    }
+  ],
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp"
+    },
+    "gh_grep": {
+      "type": "remote",
+      "url": "https://mcp.grep.app"
+    },
+    "sentry": {
+      "type": "remote",
+      "url": "https://mcp.sentry.dev/mcp",
+      "oauth": {}
+    },
+    "cloudflare-browser": {
+      "type": "remote",
+      "url": "https://browser.mcp.cloudflare.com/mcp"
+    },
+    "astro-docs": {
+      "type": "remote",
+      "url": "https://mcp.docs.astro.build/mcp"
+    },
+    "playwright": {
+      "type": "local",
+      "command": [
+        "node",
+        "/home/mint/Pasta Pessoal/deepai/opencode-mcp-stack/node-mcp/node_modules/@playwright/mcp/cli.js"
+      ]
+    },
+    "css": {
+      "type": "local",
+      "command": [
+        "node",
+        "/home/mint/Pasta Pessoal/deepai/opencode-mcp-stack/node-mcp/node_modules/css-mcp/src/server.js"
+      ]
+    },
+    "chrome-devtools": {
+      "type": "local",
+      "command": [
+        "node",
+        "/home/mint/Pasta Pessoal/deepai/opencode-mcp-stack/node-mcp/node_modules/chrome-devtools-mcp/build/src/bin/chrome-devtools-mcp.js"
+      ]
+    },
+    "filesystem": {
+      "type": "local",
+      "command": [
+        "node",
+        "/home/mint/Pasta Pessoal/deepai/opencode-mcp-stack/node-mcp/node_modules/@modelcontextprotocol/server-filesystem/dist/index.js",
+        "/home/mint"
+      ]
+    },
+    "firecrawl": {
+      "type": "local",
+      "command": [
+        "node",
+        "/home/mint/Pasta Pessoal/deepai/opencode-mcp-stack/node-mcp/node_modules/firecrawl-mcp/dist/index.js"
+      ],
+      "environment": {
+        "FIRECRAWL_API_KEY": "{env:FIRECRAWL_API_KEY}"
+      }
+    },
+    "vision": {
+      "type": "local",
+      "command": [
+        "python3",
+        "/home/mint/Pasta Pessoal/deepai/opencode-mcp-stack/custom/vision-bridge.py"
+      ],
+      "enabled": true,
+      "timeout": 90000,
+      "environment": {
+        "VISION_PYTHON": "/home/mint/Pasta Pessoal/deepai/opencode-mcp-stack/.venv/bin/python",
+        "VISION_LAUNCHER": "/home/mint/Pasta Pessoal/deepai/opencode-mcp-stack/custom/vision-launcher.py",
+        "VISION_LOG": "/home/mint/Pasta Pessoal/deepai/opencode-mcp-stack/.vision-child.log",
+        "GEMINI_MODEL": "{env:GEMINI_MODEL}",
+        "GEMINI_API_KEY": "{env:GEMINI_API_KEY}"
+      }
+    },
+    "fetch": {
+      "type": "local",
+      "command": [
+        "/home/mint/Pasta Pessoal/deepai/opencode-mcp-stack/.venv/bin/mcp-server-fetch"
+      ],
+      "enabled": true
+    },
+    "bgts-context-engine": {
+      "type": "local",
+      "command": [
+        "/home/mint/Pasta Pessoal/deepai/opencode-mcp-stack/../bgts-context-engine/.venv/bin/bce",
+        "serve-mcp"
+      ],
+      "environment": {
+        "BCE_DB_HOST": "127.0.0.1",
+        "BCE_DB_PORT": "5433",
+        "BCE_DB_NAME": "bce",
+        "BCE_DB_USER": "bce",
+        "BCE_DB_PASSWORD": "bce",
+        "BCE_GRAPH_NAME": "code_graph",
+        "BCE_ENV_FILE": "/home/mint/Pasta Pessoal/deepai/opencode-mcp-stack/../bgts-context-engine/.env"
+      },
+      "enabled": true
+    },
+    "omnivoice": {
+      "type": "local",
+      "command": [
+        "uv",
+        "--directory",
+        "/home/mint/Pasta Pessoal/deepai/opencode-mcp-stack/../VoiceStudio",
+        "run",
+        "--group",
+        "cpu",
+        "--no-group",
+        "cuda",
+        "python",
+        "-m",
+        "backend.mcp_server"
+      ],
+      "environment": {
+        "OMNIVOICE_API_URL": "http://127.0.0.1:3900",
+        "OMNIVOICE_TORCH_VARIANT": "cpu",
+        "HF_HOME": "/home/mint/.cache/huggingface"
+      },
+      "enabled": true
+    }
+  }
+}

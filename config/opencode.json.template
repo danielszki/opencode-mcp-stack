@@ -56,7 +56,7 @@
       "command": ["__HOME__/opencode/bgts-context-engine/.venv/bin/bce", "serve-mcp"],
       "environment": {
         "BCE_DB_HOST": "127.0.0.1",
-        "BCE_DB_PORT": "5432",
+        "BCE_DB_PORT": "5433",
         "BCE_DB_NAME": "bce",
         "BCE_DB_USER": "bce",
         "BCE_DB_PASSWORD": "bce",

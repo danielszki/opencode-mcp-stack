@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "stitch": {
+      "type": "http",
+      "url": "https://stitch.googleapis.com/mcp",
+      "headers": {
+        "X-Goog-Api-Key": "<SUA_STITCH_API_KEY>"
+      }
+    },
+    "bgts": {
+      "command": "<CAMINHO_DO_BCE>/bce",
+      "args": ["serve-mcp"],
+      "env": {
+        "BCE_ENV_FILE": "<CAMINHO_DO_BCE>/.env"
+      }
+    }
+  }
+}
