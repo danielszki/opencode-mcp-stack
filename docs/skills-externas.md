@@ -30,6 +30,11 @@ físicos reais (SVG, opcional WebGL shaders e 3D, PDF A4 imprimível).
 Framework-free (TS/JS) e React/Next.js. Requer Node.js 20.10+ e Chrome/Chromium
 para os checks.
 
+## Skills iart.ai (motion graphics / vídeo)
+
+Este repo também traz `skills/iart-motion/` — 55 skills de motion graphics,
+animação e vídeo (iart.ai, MIT), ver `docs/iart-motion-skills.md`.
+
 ## Não instaladas
 
 - `motiondivision/ai-kit` — **sem licença** no repo. Não redistribuível.
