@@ -11,7 +11,8 @@ clonado em outra máquina e reinstalado de forma reproduzível.
 - `skills/` — skills do agente no formato OpenCode V2 (`<id>/SKILL.md`). Inclui
   `webscraping-expert` (cópia integral da skill pública de Gabriel Greco —
   origem, licença e instalação em `docs/webscraping-expert.md`) e `unslop-ui`
-  (de Felipe Basurto — ver `docs/unslop-ui.md`).
+  (de Felipe Basurto — ver `docs/unslop-ui.md`) e as 7 skills do `openmotion`
+  (nexu-io, Apache 2.0 — ver `docs/openmotion.md`).
 - `plugins/` — plugins e marketplace.
 - `config/opencode.json.template` — config do OpenCode com placeholders `__HOME__`.
 - `scripts/install.sh` — instala tudo.

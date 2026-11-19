@@ -3,6 +3,12 @@
 Estas skills foram copiadas de repositórios públicos de terceiros e redistribuídas
 sob suas licenças originais. Os autores e as licenças constam abaixo.
 
+## Instaladas (Apache 2.0)
+
+| Skill | Autor | Repo | Licença |
+|---|---|---|---|
+| `openmotion` (+ 6 especialistas) | nexu-io | https://github.com/nexu-io/openmotion | Apache 2.0 |
+
 ## Instaladas (MIT)
 
 | Skill | Autor | Repo | Licença |
@@ -30,6 +36,12 @@ Corta os tells de IA de copy de interface e gráficos: eyebrows, numeração 01/
 subtítulos redundantes, legendas que explicam o visível, badges e status dots
 decorativos. Com `--surface` também corrige gradientes, espaçamento fora de escala,
 pesos pesados e movimento decorativo. Detalhes em `docs/unslop-ui.md`.
+
+### openmotion (Apache 2.0)
+7 skills de produção de vídeo/motion graphics com o OpenMotion Studio (alternativa
+open-source a Claude Motion/CapCut): director, media, production, recreate,
+template-to-video, video-to-template, mais a skill raiz que conecta o MCP local.
+Detalhes em `docs/openmotion.md`.
 
 ### anatomy
 Figuras isométricas interativas que explicam ideias técnicas como objetos
