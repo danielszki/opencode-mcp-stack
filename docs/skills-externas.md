@@ -11,6 +11,7 @@ sob suas licenças originais. Os autores e as licenças constam abaixo.
 | `hairline-create` | Lucas Marques | https://github.com/lucasmarkes/hairline | MIT |
 | `hairline-adopt` | Lucas Marques | https://github.com/lucasmarkes/hairline | MIT |
 | `anatomy` | Ryan (@wheresryan22) | https://github.com/wheresryan22/anatomy | MIT |
+| `unslop-ui` | Felipe Basurto | https://github.com/felipebasurto/unslop-ui | MIT |
 
 ### motion-design
 Universal motion design principles for AI agents — timing, easing, choreography,
@@ -23,6 +24,12 @@ Isometric line figures that answer the pointer, no engine Hairline.
 `hairline-create` desenha uma figura nova a partir de uma ideia;
 `hairline-adopt` reconstrói um SVG que você já tem como figura Hairline.
 Ambas entregam um HTML autocontido sem dependências.
+
+### unslop-ui
+Corta os tells de IA de copy de interface e gráficos: eyebrows, numeração 01/02/03,
+subtítulos redundantes, legendas que explicam o visível, badges e status dots
+decorativos. Com `--surface` também corrige gradientes, espaçamento fora de escala,
+pesos pesados e movimento decorativo. Detalhes em `docs/unslop-ui.md`.
 
 ### anatomy
 Figuras isométricas interativas que explicam ideias técnicas como objetos
@@ -78,4 +85,5 @@ Com o CLI `skills` (vercel-labs/skills) ou `npx skills add <user>/<repo>`:
 npx skills add LottieFiles/motion-design-skill
 npx skills add lucasmarkes/hairline
 npx skills add wheresryan22/anatomy
+npx skills add felipebasurto/unslop-ui -g
 ```
