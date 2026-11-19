@@ -1,0 +1,495 @@
+# Rails 7.0 → 7.1 Upgrade Guide
+
+**Ruby Requirement:** 2.7.3+ (3.0+ recommended)
+
+**Based on "The Complete Guide to Upgrade Rails" by FastRuby.io (OmbuLabs)**
+
+---
+
+## Overview
+
+Rails 7.1 introduces:
+- **Composite Primary Keys** support
+- **Async Queries** for background database operations
+- **Dockerfile** generation by default
+- **Bun** JavaScript runtime support
+- **Enhanced encryption** for Active Record
+
+---
+
+## Breaking Changes
+
+### 🔴 HIGH PRIORITY
+
+#### Ruby Version Requirement
+
+**Pattern:** `RUBY_VERSION`
+
+**What Changed:**
+Rails 7.1 needs Ruby 2.7.3 or newer. The `rails` 7.1 gemspec still says `required_ruby_version >= 2.7.0`, the same as 7.0, but activerecord 7.1 defines `def method_missing(name, ...)` in `attribute_methods.rb`. A leading argument before `...` is a syntax error before Ruby 2.7.3 (checked on the `ruby:2.7.2` and `ruby:2.7.3` images), so on Ruby 2.7.0 to 2.7.2 the app fails as soon as Active Record loads. The [FastRuby.io compatibility table](https://www.fastruby.io/blog/ruby/rails/versions/compatibility-table.html) lists the same floor.
+
+**Detection Pattern:**
+```ruby
+# Gemfile
+ruby "2.7.2"
+
+# .ruby-version
+2.7.2
+
+# .tool-versions
+ruby 2.7.2
+```
+
+**Fix:**
+```ruby
+# BEFORE
+ruby "2.7.2"
+
+# AFTER
+ruby "3.2.6"
+```
+
+Upgrade Ruby while the app is still on Rails 7.0, as its own deploy: 7.0 runs on 2.7.3 and newer, so both sides of the dual boot use the new Ruby.
+
+---
+
+#### cache_classes → enable_reloading
+
+**Pattern:** `CACHE_CLASSES`
+
+**What Changed:**
+`config.cache_classes` is replaced by `config.enable_reloading` with **inverted** boolean logic.
+
+**Detection Pattern:**
+```ruby
+# config/environments/development.rb
+config.cache_classes = false
+
+# config/environments/production.rb
+config.cache_classes = true
+```
+
+**Fix:**
+```ruby
+# BEFORE
+config.cache_classes = false  # Don't cache (development)
+config.cache_classes = true   # Cache (production)
+
+# AFTER
+config.enable_reloading = true   # Enable reloading (development)
+config.enable_reloading = false  # Disable reloading (production)
+```
+
+**Note:** The boolean is INVERTED:
+- `cache_classes = false` → `enable_reloading = true`
+- `cache_classes = true` → `enable_reloading = false`
+
+---
+
+#### Force SSL Default in Production
+
+**Pattern:** `FORCE_SSL`
+
+**What Changed:**
+`config.force_ssl` is now `true` by default in production.
+
+**Detection Pattern:**
+```ruby
+# config/environments/production.rb
+# If this line is missing or false, you need to check
+config.force_ssl = false
+```
+
+**Fix:**
+
+If you're NOT using SSL:
+```ruby
+# config/environments/production.rb
+config.force_ssl = false  # Explicitly disable
+```
+
+If you ARE using SSL (recommended):
+```ruby
+# config/environments/production.rb
+config.force_ssl = true  # Now the default
+```
+
+---
+
+#### preview_path → preview_paths (Mailer)
+
+**Pattern:** `PREVIEW_PATH`
+
+**What Changed:**
+Mailer preview path configuration changed from singular to plural.
+
+**Detection Pattern:**
+```ruby
+config.action_mailer.preview_path = "#{Rails.root}/spec/mailers/previews"
+```
+
+**Fix:**
+```ruby
+# BEFORE
+config.action_mailer.preview_path = "#{Rails.root}/spec/mailers/previews"
+
+# AFTER
+config.action_mailer.preview_paths = ["#{Rails.root}/spec/mailers/previews"]
+```
+
+---
+
+#### SQLite Database Location Changed
+
+**Pattern:** `SQLITE_LOCATION`
+
+**What Changed:**
+SQLite databases now default to `storage/` instead of `db/`.
+
+**Detection Pattern:**
+```yaml
+# config/database.yml
+development:
+  database: db/development.sqlite3
+```
+
+**Fix:**
+
+Option 1: Keep existing location:
+```yaml
+# config/database.yml
+development:
+  database: db/development.sqlite3  # Keep as-is
+```
+
+Option 2: Move to new location:
+```bash
+mkdir -p storage
+mv db/*.sqlite3 storage/
+```
+
+```yaml
+# config/database.yml
+development:
+  database: storage/development.sqlite3
+```
+
+---
+
+#### lib/ Autoloaded by Default
+
+**Pattern:** `LIB_AUTOLOAD`
+
+**What Changed:**
+Files in `lib/` are now autoloaded by Zeitwerk.
+
+**Detection Pattern:**
+Check for naming conflicts in `lib/` folder.
+
+**Fix:**
+
+Configure in `config/application.rb`:
+```ruby
+# config/application.rb
+
+# Option 1: Configure autoloading (default)
+config.autoload_lib(ignore: %w[assets tasks])
+
+# Option 2: Disable lib autoloading
+# Remove or comment out the autoload_lib line
+```
+
+Ensure files in `lib/` follow Zeitwerk naming:
+- `lib/my_module.rb` → `MyModule`
+- `lib/my_module/helper.rb` → `MyModule::Helper`
+
+---
+
+#### legacy_connection_handling Removed
+
+**Pattern:** `LEGACY_CONNECTION_HANDLING`
+
+**What Changed:**
+`config.active_record.legacy_connection_handling` was deprecated in Rails 7.0 and is **completely removed in Rails 7.1**. Setting it will raise an error on boot.
+
+**Detection Pattern:**
+```ruby
+# config/application.rb or config/environments/*.rb
+config.active_record.legacy_connection_handling = false
+config.active_record.legacy_connection_handling = true
+```
+
+**Fix:**
+```ruby
+# BEFORE (Rails 7.0) — causes error in 7.1
+config.active_record.legacy_connection_handling = false
+
+# AFTER (Rails 7.1) — remove the line entirely
+# (delete this configuration — it no longer exists)
+```
+
+**Dual-boot compatible:**
+```ruby
+if NextRails.next?
+  # Do nothing — legacy_connection_handling is removed in 7.1
+else
+  config.active_record.legacy_connection_handling = false
+end
+```
+
+**Note:** If you still have code relying on the legacy connection handling behavior (per-class connection switching), you must migrate to the new connection handling model using `connects_to` and `connected_to` before upgrading.
+
+---
+
+### 🟡 MEDIUM PRIORITY
+
+#### Query Log Tags Format
+
+**Pattern:** `QUERY_LOG_TAGS`
+
+**What Changed:**
+New query log format options available.
+
+**Detection Pattern:**
+```ruby
+config.active_record.query_log_tags_enabled = true
+```
+
+**Fix:**
+```ruby
+# config/application.rb
+config.active_record.query_log_tags_enabled = true
+config.active_record.query_log_tags_format = :sqlcommenter  # or :legacy
+```
+
+---
+
+#### Cache Format Version 7.1
+
+**Pattern:** `CACHE_FORMAT_VERSION_61`
+
+**What Changed:**
+7.1 adds a new cache serialization format and **deprecates** the 6.1 format, which 7.2 removes. `ActiveSupport::Cache.format_version` defaults to 6.1; only `load_defaults 7.0` (sets 7.0) and `load_defaults 7.1` (sets 7.1) change it. So an app on `load_defaults` 5.x or 6.x that never sets the format warns on every boot under 7.1. The pattern flags that `load_defaults` line and any explicit `cache_format_version = 6.1`. It misses an app with no `load_defaults` line at all, which also warns.
+
+**Detection Pattern:**
+```ruby
+config.load_defaults 6.1
+config.active_support.cache_format_version = 6.1
+```
+
+**Fix:**
+```ruby
+# BEFORE (config/application.rb)
+config.load_defaults 6.1
+
+# AFTER
+config.load_defaults 6.1
+config.active_support.cache_format_version = 7.0
+```
+The AFTER works on 7.0 too: 7.0 reads both the 6.1 and 7.0 formats, and 7.1 reads 7.0, so no `NextRails.next?` branch is needed and a rolling deploy is safe. Or resolve it as part of the `load_defaults` bump in Workflow 12.
+
+**Warning:** Don't set `cache_format_version = 7.1` until ALL servers run 7.1. Rails 7.0 cannot read entries written in the 7.1 format, so during a rolling deploy the servers still on 7.0 lose those cache entries. Deploy the version bump first, then flip the format.
+
+---
+
+#### `Rails.application.secrets` Deprecated
+
+**Pattern:** `SECRETS_YML_ENC`
+
+**What Changed:**
+The secrets files do not move: 7.0 and 7.1 both read `config/secrets.yml`, and `config/secrets.yml.enc` when `config.read_encrypted_secrets = true`. 7.1 deprecates the secrets API instead. Every `Rails.application.secrets` call warns, a `secret_key_base` that comes only from secrets warns, and `bin/rails secrets:edit` / `secrets:show` warn. Rails 7.2 removes `Rails.application.secrets`.
+
+**Detection Pattern:**
+```ruby
+Rails.application.secrets.stripe_key
+config.read_encrypted_secrets = true
+```
+
+**Fix:**
+```ruby
+# BEFORE (value in config/secrets.yml or secrets.yml.enc, under production:)
+Rails.application.secrets.stripe_key
+
+# AFTER (value moved with bin/rails credentials:edit)
+Rails.application.credentials.stripe_key
+```
+The AFTER works on 7.0 too. `secrets.yml` is keyed by environment and `credentials.yml.enc` is not, so drop the environment level or use per-environment files (`bin/rails credentials:edit --environment production`). Once nothing reads secrets, delete `secrets.yml` / `secrets.yml.enc` and the `read_encrypted_secrets` line.
+
+---
+
+#### Active Record inspect Output Changed
+
+**Pattern:** `INSPECT_OUTPUT`
+
+**What Changed:**
+`ActiveRecord::Core#inspect` now respects `attributes_for_inspect` configuration.
+
+**Detection Pattern:**
+```ruby
+# Logging or tests that depend on inspect output
+puts user.inspect
+expect(user.inspect).to include("email")
+```
+
+**Fix:**
+Configure which attributes appear in inspect:
+```ruby
+# config/application.rb
+config.active_record.attributes_for_inspect = [:id, :name, :email]
+# Or show all:
+config.active_record.attributes_for_inspect = :all
+```
+
+#### `ActiveRecord::Migration.check_pending!` Deprecated
+
+**Pattern:** `MIGRATION_CHECK_PENDING`
+
+**What Changed:**
+`ActiveRecord::Migration.check_pending!` is deprecated in favor of `check_all_pending!`, which loops through all configured databases. It still works in 7.1 but emits a deprecation warning, and is removed entirely in Rails 7.2. Commonly found in `test_helper.rb` or `rails_helper.rb`, but also set up by healthcheck gems (e.g. [`rails-healthcheck`](https://github.com/linqueta/rails-healthcheck)) to run on every `/healthcheck` request.
+
+**Detection Pattern:**
+```ruby
+# test/test_helper.rb, spec/rails_helper.rb, or config/initializers/*.rb (e.g. healthcheck gems)
+ActiveRecord::Migration.check_pending!
+```
+
+**Fix:**
+```ruby
+# BEFORE
+ActiveRecord::Migration.check_pending!
+
+# AFTER
+ActiveRecord::Migration.check_all_pending!
+```
+
+---
+
+### 🟢 LOW PRIORITY
+
+#### Content Security Policy Middleware Constants Removed
+
+**Pattern:** `CSP_MIDDLEWARE_CONSTANTS`
+
+**What Changed:**
+The CSP DSL in `config/initializers/content_security_policy.rb` does not change in 7.1; it only gains the `:unsafe_hashes` source. What 7.1 removes are the `CONTENT_TYPE`, `POLICY` and `POLICY_REPORT_ONLY` constants on `ActionDispatch::ContentSecurityPolicy::Middleware`, so code or specs that read them raise `NameError`.
+
+**Detection Pattern:**
+```ruby
+response.headers[ActionDispatch::ContentSecurityPolicy::Middleware::POLICY]
+```
+
+**Fix:**
+```ruby
+# BEFORE
+response.headers[ActionDispatch::ContentSecurityPolicy::Middleware::POLICY]
+
+# AFTER
+response.headers["Content-Security-Policy"]
+```
+The AFTER works on 7.0 too. The replacement constant, `ActionDispatch::Constants::CONTENT_SECURITY_POLICY`, does not exist on 7.0, so use the string while dual booting.
+
+---
+
+## New Features
+
+### Composite Primary Keys
+
+```ruby
+class TravelRoute < ApplicationRecord
+  self.primary_key = [:origin, :destination]
+end
+```
+
+### Async Queries
+
+```ruby
+# Load asynchronously
+posts = Post.where(published: true).load_async
+
+# Access results (waits if needed)
+posts.each { |post| ... }
+```
+
+### Dockerfile
+
+New Rails apps include a production-ready Dockerfile:
+```bash
+rails new myapp  # Includes Dockerfile
+```
+
+---
+
+## Migration Steps
+
+### Phase 1: Preparation
+```bash
+git checkout -b rails-71-upgrade
+
+# Set up dual-boot (optional but recommended)
+gem install next_rails
+next_rails --init
+```
+
+### Phase 2: Gemfile Updates
+```ruby
+# Gemfile
+if next?
+  gem 'rails', '~> 7.1.0'
+else
+  gem 'rails', '~> 7.0.0'
+end
+```
+
+### Phase 3: Fix Breaking Changes
+1. Replace `cache_classes` with `enable_reloading`
+2. Update `preview_path` to `preview_paths`
+3. Review SSL configuration
+4. Configure `autoload_lib` if using lib/
+5. Remove `config.active_record.legacy_connection_handling` (causes error in 7.1)
+
+### Phase 4: Configuration
+```bash
+rails app:update
+```
+
+Update `config.load_defaults` to 7.1
+
+### Phase 5: Testing
+- Run test suite
+- Test in development (reloading)
+- Test in production mode (caching)
+- Verify mailer previews work
+
+---
+
+## Configuration Migration Checklist
+
+- [ ] `cache_classes` → `enable_reloading` (inverted!)
+- [ ] `preview_path` → `preview_paths` (array)
+- [ ] Review `force_ssl` setting
+- [ ] Configure `autoload_lib`
+- [ ] Remove `config.active_record.legacy_connection_handling` (raises error in 7.1)
+- [ ] Update `load_defaults` to 7.1
+
+---
+
+## Common Issues — Quick Reference
+
+Error → section lookup for the most common errors encountered during this upgrade:
+
+| Error | See |
+|-------|-----|
+| Code not reloading in development | "cache_classes → enable_reloading" — `enable_reloading = true` in development |
+| SSL redirect loop behind a proxy | "Force SSL Default in Production" — let the proxy handle SSL or set `force_ssl = false` |
+| Constant not found in `lib/` | "lib/ Autoloaded by Default" — `lib/my_file.rb` must define `MyFile` |
+| Boot crashes on `legacy_connection_handling` | "legacy_connection_handling Removed" — delete every occurrence; guard with `NextRails.next?` while dual-booting |
+| `cache_format_version = 6.1` deprecation warning on every boot | "Cache Format Version 7.1" — set `cache_format_version = 7.0` |
+| `Rails.application.secrets` is deprecated warning | "`Rails.application.secrets` Deprecated" — move the values to credentials |
+
+---
+
+## Resources
+
+- [Rails 7.1 Release Notes](https://guides.rubyonrails.org/7_1_release_notes.html)
+- [RailsDiff 7.0 to 7.1](http://railsdiff.org/7.0.8/7.1.0)
+- [Zeitwerk Documentation](https://github.com/fxn/zeitwerk)

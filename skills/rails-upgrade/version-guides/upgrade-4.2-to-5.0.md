@@ -1,0 +1,459 @@
+# Rails 4.2 → 5.0 Upgrade Guide
+
+**Ruby Requirement:** 2.2.2+ (2.3+ recommended)
+
+**Based on "The Complete Guide to Upgrade Rails" by FastRuby.io (OmbuLabs)**
+
+---
+
+## Overview
+
+Rails 5.0 is a major release with significant changes:
+- **ActionCable** for WebSockets
+- **API Mode** for JSON APIs
+- **ApplicationRecord** base class
+- **belongs_to required by default**
+- **Turbolinks 5**
+- **Rails command** instead of rake
+
+---
+
+## Breaking Changes
+
+### 🔴 HIGH PRIORITY
+
+#### Ruby 2.2.2+ Required
+
+**Pattern:** `RUBY_VERSION`
+
+**What Changed:**
+Rails 5.0 requires Ruby 2.2.2 or newer: the `rails` 5.0 gemspec sets `required_ruby_version >= 2.2.2`, while 4.2 accepts `>= 1.9.3`. Bundler refuses to install 5.0 on an older Ruby, so upgrade Ruby first, while the app is still on Rails 4.2, as its own deploy. Rails 5.0 also has a ceiling the gemspec does not state: the [FastRuby.io compatibility table](https://www.fastruby.io/blog/ruby/rails/versions/compatibility-table.html) lists it as needing Ruby below 2.5, so an app already on Ruby 2.5 or newer has to use Ruby 2.4 for this hop. The gemspec sets no upper bound; a Ruby released after a Rails version may need that version's latest patch release.
+
+**Detection Pattern:**
+```ruby
+# Gemfile
+ruby "2.1.10"
+
+# .ruby-version
+2.1.10
+
+# .tool-versions
+ruby 2.1.10
+```
+
+**Fix:**
+```bash
+rbenv install 2.3.8
+rbenv local 2.3.8
+```
+
+**Common Issue:**
+If you see `cannot load such file -- test/unit/assertions`, add:
+```ruby
+# Gemfile
+gem 'test-unit'
+```
+
+---
+
+#### ApplicationRecord Base Class
+
+**Pattern:** `ACTIVERECORD_BASE`
+
+**What Changed:**
+Models now inherit from `ApplicationRecord` instead of `ActiveRecord::Base`.
+
+**Fix:**
+
+1. Create the ApplicationRecord class:
+```ruby
+# app/models/application_record.rb
+
+class ApplicationRecord < ActiveRecord::Base
+  self.abstract_class = true
+end
+```
+
+2. Update all models:
+```ruby
+# BEFORE
+class User < ActiveRecord::Base
+end
+
+# AFTER
+class User < ApplicationRecord
+end
+```
+
+---
+
+#### belongs_to Required by Default
+
+**Pattern:** `BELONGS_TO_REQUIRED`
+
+**What Changed:**
+`belongs_to` associations now require the associated record to exist.
+
+**Detection Pattern:**
+```ruby
+class Post < ApplicationRecord
+  belongs_to :author  # Now required!
+end
+```
+
+**Fix:**
+
+Add `optional: true` for nullable associations:
+```ruby
+# BEFORE (allowed nil)
+belongs_to :parent_category
+
+# AFTER (explicit optional)
+belongs_to :parent_category, optional: true
+```
+
+Or disable globally (not recommended):
+```ruby
+# config/application.rb
+config.active_record.belongs_to_required_by_default = false
+```
+
+---
+
+#### Strong Parameters Required
+
+**Pattern:** `PROTECTED_ATTRIBUTES`, `ATTR_ACCESSIBLE`
+
+**What Changed:**
+`protected_attributes` gem no longer works in Rails 5.
+
+**Detection Pattern:**
+```ruby
+# Gemfile
+gem 'protected_attributes'
+
+# Models
+attr_accessible :name, :email
+```
+
+**Fix:**
+You MUST migrate to Strong Parameters before upgrading:
+
+```ruby
+# Remove from Gemfile
+# gem 'protected_attributes'
+
+# Remove from models
+# attr_accessible :name, :email
+
+# Add to controllers
+class UsersController < ApplicationController
+  private
+
+  def user_params
+    params.require(:user).permit(:name, :email)
+  end
+end
+```
+
+**Tool:** Use [rails_upgrader](https://github.com/fastruby/rails_upgrader) gem to help automate this.
+
+---
+
+#### Parameters No Longer HashWithIndifferentAccess
+
+**Pattern:** `PARAMS_AS_HASH`
+
+**What Changed:**
+`params` is now `ActionController::Parameters`, not a hash.
+
+**Detection Pattern:**
+```ruby
+# These may break
+params.slice(:name, :email)
+params.except(:id)
+params.fetch(:user)
+```
+
+**Fix:**
+Permit parameters first, then call hash methods:
+
+```ruby
+# BEFORE
+params[:user].slice(:name, :email)
+
+# AFTER
+params.require(:user).permit(:name, :email).to_h.slice(:name, :email)
+```
+
+---
+
+### 🟡 MEDIUM PRIORITY
+
+#### Controller Tests Changed
+
+**Pattern:** `ASSIGNS_IN_TESTS`, `ASSERT_TEMPLATE`
+
+**What Changed:**
+`assigns` and `assert_template` are extracted to a gem.
+
+**Detection Pattern:**
+```ruby
+# In tests
+assigns(:user)
+assert_template 'index'
+```
+
+**Fix:**
+```ruby
+# Gemfile
+gem 'rails-controller-testing', group: :test
+```
+
+---
+
+#### File Upload Testing Changed
+
+**Pattern:** `UPLOAD_FILE_TEST`
+
+**What Changed:**
+Use `Rack::Test::UploadedFile` instead of `ActionDispatch::Http::UploadedFile`.
+
+**Fix:**
+```ruby
+# BEFORE
+ActionDispatch::Http::UploadedFile.new(...)
+
+# AFTER
+Rack::Test::UploadedFile.new(file_path, 'image/png')
+```
+
+---
+
+#### Callback Halting Changed
+
+**Pattern:** `CALLBACK_HALT`
+
+**What Changed:**
+Returning `false` from a before_* Active Record or Active Model callback no longer halts the
+chain. On 5.0 it still halts, with a deprecation warning, while
+`ActiveSupport.halt_callback_chains_on_return_false` is `true` (the setting an upgraded app gets);
+new 5.0 apps set it to `false`. From 5.1 the setting is ignored (it only warns, and 5.2 removes
+it), so an app still on `true` starts saving or destroying at the 5.1 hop, warned only that the
+setting is deprecated.
+Nothing raises. A `before_save` that returns `false` saves the record on Active Record 5.1 and
+later and refuses it on 4.2, for the method form and the block form alike.
+
+**Detection Pattern:**
+Three shapes yield the halting `false`, and the bare trailing one is the easiest to miss:
+
+```ruby
+before_save :check_something
+before_destroy :guard
+before_save { false if archived? }
+
+def check_something
+  return false if invalid_condition
+end
+
+def guard
+  if protected?
+    false            # the method's value; halts on 4.2, ignored from 5.1
+  else
+    true
+  end
+end
+```
+
+A callback whose last expression only evaluates to `false` (`!locked?`) halts too, and no grep
+finds it, so read the last line of each before_* callback.
+
+Controller filters are not affected: `before_action` never halted on `false`. Its terminator was
+`response_body` through 4.2 and is `performed?` from 5.0, so only `render` or `redirect_to` has
+ever stopped the action.
+
+**Fix:**
+```ruby
+# BEFORE
+def check_something
+  return false if invalid_condition
+end
+
+# AFTER
+def check_something
+  throw :abort if invalid_condition
+end
+```
+
+`throw :abort` raises `UncaughtThrowError: uncaught throw :abort` on 4.2, so a dual-boot app
+branches it:
+
+```ruby
+def check_something
+  return unless invalid_condition
+  NextRails.next? ? throw(:abort) : false
+end
+```
+
+---
+
+#### Rails Command Replaces Rake
+
+**Pattern:** `RAKE_COMMANDS`
+
+**What Changed:**
+Use `rails` instead of `rake` for many commands.
+
+**Old vs New:**
+```bash
+# BEFORE
+rake db:migrate
+rake test
+rake routes
+
+# AFTER (both work, but rails is preferred)
+rails db:migrate
+rails test
+rails routes
+```
+
+---
+
+#### `redirect_to :back` Deprecated
+
+**Pattern:** `REDIRECT_TO_BACK_DEPRECATED`
+
+**What Changed:**
+`redirect_to :back` is deprecated in Rails 5.0. It still works and emits a deprecation warning, but it is **removed outright in Rails 5.1** — fix all call sites now to avoid a runtime break on the next hop.
+
+**Detection Pattern:**
+```ruby
+redirect_to :back
+redirect_to :back, notice: 'Done!'
+```
+
+**Fix:**
+```ruby
+# BEFORE
+redirect_to :back
+
+# AFTER
+redirect_back(fallback_location: root_path)
+redirect_back(fallback_location: root_path, notice: 'Done!')
+```
+
+`redirect_back` accepts a `fallback_location:` used when `HTTP_REFERER` is missing — without it, requests with no referer raise `ActionController::RedirectBackError`.
+
+---
+
+## Gem Compatibility
+
+Check gems at [RailsBump](https://railsbump.org/) before upgrading.
+
+Common gems that need updating:
+
+| Gem | Rails 4.2 | Rails 5.0 |
+|-----|-----------|-----------|
+| devise | 3.5+ | 4.2+ |
+| cancancan | 1.15+ | 2.0+ |
+| ransack | 1.7+ | 1.8+ |
+| activeadmin | 1.0+ | 1.1+ |
+
+---
+
+## Migration Steps
+
+### Phase 1: Preparation
+```bash
+git checkout -b rails-50-upgrade
+
+# Ensure Ruby 2.2.2+
+ruby -v
+
+# Check gem compatibility
+# Visit railsbump.org
+```
+
+### Phase 2: Pre-requisites
+1. **Migrate to Strong Parameters** (if using protected_attributes)
+2. **Update callbacks** that return false
+3. **Check gem compatibility**
+
+### Phase 3: Gemfile Updates
+```ruby
+# Gemfile
+gem 'rails', '~> 5.0.0'
+
+# Add for testing
+gem 'rails-controller-testing', group: :test
+```
+
+```bash
+bundle update rails
+```
+
+### Phase 4: Create ApplicationRecord
+```ruby
+# app/models/application_record.rb
+class ApplicationRecord < ActiveRecord::Base
+  self.abstract_class = true
+end
+```
+
+Update all models to inherit from `ApplicationRecord`.
+
+### Phase 5: Fix belongs_to
+Add `optional: true` to associations that can be nil.
+
+### Phase 6: Configuration
+```bash
+rails app:update
+```
+
+### Phase 7: Testing
+- Run full test suite
+- Test all forms and validations
+- Test model associations
+- Test callbacks
+
+---
+
+## belongs_to Migration Checklist
+
+For each model with `belongs_to`:
+
+- [ ] Check if association can be nil
+- [ ] Add `optional: true` if nullable
+- [ ] Test create/update without the association
+- [ ] Verify validation messages
+
+---
+
+## Common Issues — Quick Reference
+
+Error → section lookup for the most common errors encountered during this upgrade:
+
+| Error | See |
+|-------|-----|
+| `Author must exist` validation failure | "belongs_to Required by Default" — `optional: true` where the association is optional |
+| `ActiveModel::ForbiddenAttributesError` | "Strong Parameters Required" — pass permitted params |
+| Callback returning `false` no longer stops the save | "Callback Halting Changed" — `throw :abort` |
+
+---
+
+## New Features to Explore
+
+After upgrading, consider using:
+
+- **ActionCable** for real-time features
+- **API Mode** for JSON-only APIs
+- **ActiveRecord::Attributes** for custom types
+- **ApplicationRecord** for shared model logic
+
+---
+
+## Resources
+
+- [Rails 5.0 Release Notes](https://guides.rubyonrails.org/5_0_release_notes.html)
+- [RailsDiff 4.2 to 5.0](http://railsdiff.org/4.2.10/5.0.7)
+- [Strong Parameters Guide](https://guides.rubyonrails.org/action_controller_overview.html#strong-parameters)

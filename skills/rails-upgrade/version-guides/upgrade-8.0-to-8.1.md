@@ -1,0 +1,573 @@
+# Rails 8.0 → 8.1 Upgrade Guide
+
+**Ruby Requirement:** 3.2.0+ (required)
+
+---
+
+## Overview
+
+Rails 8.1 is a minor release with:
+- **bundler-audit** integration for security scanning
+- **Database configuration** naming changes
+- **SSL configuration** changes for Kamal deployments
+- Removal of some deprecated job adapters
+
+---
+
+## Breaking Changes
+
+### 🔴 HIGH PRIORITY
+
+#### SSL Configuration Commented Out
+
+**Pattern:** `SSL_COMMENTED`
+
+**What Changed:**
+SSL configuration is now commented out by default (assumes Kamal handles SSL).
+
+**Detection Pattern:**
+```ruby
+# config/environments/production.rb
+# If you're NOT using Kamal and see this:
+# config.force_ssl = true
+# config.assume_ssl = true
+```
+
+**Fix:**
+
+If NOT using Kamal (traditional deployment):
+```ruby
+# config/environments/production.rb
+# Uncomment these lines:
+config.force_ssl = true
+config.assume_ssl = true
+```
+
+If using Kamal:
+```ruby
+# Leave commented - Kamal handles SSL
+# config.force_ssl = true
+```
+
+---
+
+#### pool: → max_connections:
+
+**Pattern:** `POOL_RENAME`
+
+**What Changed:**
+Database configuration renames `pool:` to `max_connections:`. `pool:` stays as a deprecated alias in 8.1 (warning, not an error); setting both keys to different values raises `Ambiguous configuration`.
+
+**Detection Pattern:**
+```yaml
+# config/database.yml
+production:
+  adapter: postgresql
+  pool: 5
+```
+
+**Fix:**
+```yaml
+# BEFORE
+production:
+  adapter: postgresql
+  pool: 5
+
+# AFTER
+production:
+  adapter: postgresql
+  max_connections: 5
+```
+
+**Note:** Update ALL database configurations (primary, cache, queue, cable).
+
+---
+
+#### bundler-audit Required
+
+**Pattern:** `BUNDLER_AUDIT`
+
+**What Changed:**
+Rails 8.1 expects bundler-audit for security vulnerability scanning.
+
+**Fix:**
+
+1. Add to Gemfile:
+```ruby
+# Gemfile
+gem 'bundler-audit', group: :development
+```
+
+2. Create the script:
+```bash
+# bin/brakeman
+#!/usr/bin/env ruby
+require "bundler/audit/cli"
+Bundler::Audit::CLI.start
+```
+
+3. Make executable:
+```bash
+chmod +x bin/brakeman
+```
+
+4. Run security audit:
+```bash
+bundle audit check --update
+```
+
+---
+
+#### Route With Multiple Paths Raises
+
+**Pattern:** `ROUTES_MULTIPLE_PATHS_REMOVED`
+
+**What Changed:**
+Rails 8.0 drew one route per path when a route call got several paths, and warned that this was deprecated. Rails 8.1 raises `ArgumentError: Wrong number of arguments (expect 1, got 2)` while drawing routes, so the app does not boot. The same holds for several action symbols in one call inside a `member` or `collection` block.
+
+**Detection Pattern:**
+```ruby
+# config/routes.rb
+get "/old1", "/old2", to: "foo#bar"
+
+resources :photos do
+  member do
+    get :preview, :download
+  end
+end
+```
+
+**Fix:**
+```ruby
+# BEFORE
+get "/old1", "/old2", to: "foo#bar"
+get :preview, :download
+
+# AFTER
+get "/old1", to: "foo#bar"
+get "/old2", to: "foo#bar"
+get :preview
+get :download
+```
+The AFTER works on 8.0 too.
+
+---
+
+### 🟡 MEDIUM PRIORITY
+
+#### Semicolon Query Separator Removed
+
+**Pattern:** `SEMICOLON_SEPARATOR`, `STRICT_QUERY_STRING_SEPARATOR_CONFIG`
+
+**What Changed:**
+On Rails 8.0 with Rack 2, `ActionDispatch::QueryParser` still split a query string, and a form-urlencoded
+request body, on `;`, with a deprecation warning. Rails 8.1 splits on `&` only, so a `;` stays inside the value and the
+parameters after it disappear. Nothing raises. An app that already ran Rack 3 on 8.0 saw this at
+that hop.
+
+| `GET /search?q=test;page=2` | `params` |
+|---|---|
+| Rails 8.0, Rack 2.2 | `{"q"=>"test", "page"=>"2"}` plus the deprecation warning |
+| Rails 8.0, Rack 3.1 | `{"q"=>"test;page=2"}` |
+| Rails 8.1 | `{"q"=>"test;page=2"}` |
+
+`config.action_dispatch.strict_query_string_separator` has no effect on 8.1 and warns that it
+goes away in 8.2.
+
+**Detection Pattern:**
+```bash
+grep -rnE "[?&][A-Za-z_][][%.[:alnum:]_-]*=([^[:space:]'\"&;#<>!=(){}|]|#\{[^}]*\})*;[A-Za-z_][][%.[:alnum:]_-]*=" app/ lib/ config/ spec/ test/
+grep -rn "strict_query_string_separator" config/
+```
+URLs that outside clients send can only be found in logs. Search the request log for `Started`
+lines whose query string has a `;` between two `key=` pairs, or the proxy's access log:
+
+```bash
+grep -E 'Started [A-Z]+ "[^"]*\?[^"]*;[A-Za-z_][^"=]*=' log/production.log
+```
+
+The deprecation warning `Using semicolon as a query string separator is deprecated` does not show
+in production: the generated `production.rb` sets `config.active_support.report_deprecations =
+false`, and it is also silent when `strict_query_string_separator` is set to `false`.
+
+**Fix:**
+```ruby
+# BEFORE
+"/search?q=test;page=2"
+
+# AFTER
+"/search?q=test&page=2"
+```
+
+Delete `strict_query_string_separator` from the config. For outside clients that keep sending
+`;`, rewrite the query string in a Rack middleware ahead of Rails, or have them switch.
+
+---
+
+#### Sidekiq Adapter Removed
+
+**Pattern:** `SIDEKIQ_ADAPTER`
+
+**What Changed:**
+Built-in Sidekiq adapter removed from ActiveJob.
+
+**Detection Pattern:**
+```ruby
+# Gemfile
+gem 'sidekiq', '< 6.5'
+```
+
+**Fix:**
+Update Sidekiq to 7.3.3+, the first release that ships its own Active Job adapter:
+```ruby
+# Gemfile
+gem 'sidekiq', '>= 7.3.3'
+```
+
+---
+
+#### SuckerPunch Adapter Removed
+
+**Pattern:** `SUCKER_PUNCH`
+
+**What Changed:**
+Built-in SuckerPunch adapter removed.
+
+**Fix:**
+Update sucker_punch to 3.2+ which includes its own adapter:
+```ruby
+# Gemfile
+gem 'sucker_punch', '>= 3.2'
+```
+
+---
+
+#### Azure Storage Service Removed
+
+**Pattern:** `AZURE_STORAGE`
+
+**What Changed:**
+Azure storage service adapter removed from Active Storage.
+
+**Detection Pattern:**
+```yaml
+# config/storage.yml
+azure:
+  service: AzureStorage
+```
+
+**Fix:**
+- Switch to S3, GCS, or Disk storage
+- Or use azure-storage-blob gem directly with custom service
+
+---
+
+#### Benchmark.ms Removed
+
+**Pattern:** `BENCHMARK_MS_REMOVED`
+
+**What Changed:**
+Rails 8.0 defined `Benchmark.ms` as a deprecated core extension. Rails 8.1 removes it and drops Active Support's dependency on the `benchmark` gem. The gem defines `Benchmark.ms` itself only from 0.5.0 (0.4.x, the Ruby 3.4 default, does not), so on 8.1 a call raises `NoMethodError: undefined method 'ms' for module Benchmark` unless the app bundles benchmark 0.5.0 or later.
+
+**Detection Pattern:**
+```ruby
+elapsed = Benchmark.ms { run_report }
+```
+
+**Fix:**
+```ruby
+# BEFORE
+elapsed = Benchmark.ms { run_report }
+
+# AFTER
+elapsed = ActiveSupport::Benchmark.realtime(:float_millisecond) { run_report }
+```
+The AFTER works on 8.0 too (`ActiveSupport::Benchmark` exists from 8.0.0). To keep the call as it is, add `gem "benchmark", ">= 0.5.0"` to the Gemfile instead.
+
+---
+
+#### ActiveSupport::Configurable Deprecated
+
+**Pattern:** `AS_CONFIGURABLE`
+
+**What Changed:**
+Rails 8.0 offered `ActiveSupport::Configurable` with no warning. Rails 8.1 prints a deprecation warning the first time the module loads: it is deprecated without replacement and will be removed in Rails 8.2. The module still works in 8.1.
+
+**Detection Pattern:**
+```ruby
+class ReportSettings
+  include ActiveSupport::Configurable
+  config_accessor :timeout
+end
+```
+
+**Fix:**
+```ruby
+# BEFORE
+class ReportSettings
+  include ActiveSupport::Configurable
+  config_accessor :timeout
+end
+ReportSettings.timeout = 5
+
+# AFTER
+class ReportSettings
+  class_attribute :timeout
+end
+ReportSettings.timeout = 5
+```
+The AFTER works on 8.0 too. Code that reads the `config` object itself (`ReportSettings.config.timeout`) needs its own reader, since `class_attribute` does not define `config`.
+
+---
+
+### 🟢 LOW PRIORITY
+
+#### schema.rb Column Sorting Change
+
+**Pattern:** none (every app that dumps db/schema.rb gets it; there is no code to find)
+
+**What Changed:**
+Database columns in `schema.rb` are now sorted alphabetically instead of by creation order.
+
+**Impact:**
+Running `rails db:migrate` may regenerate `schema.rb` with columns in different order.
+
+**Note:**
+This is a cosmetic change. Your database structure is unaffected. You may see large diffs in version control on first migration after upgrade.
+
+---
+
+#### MySQL Unsigned Types Deprecation
+
+**Pattern:** `MYSQL_UNSIGNED`
+
+**What Changed:**
+MySQL `unsigned: true` generates deprecation warnings.
+
+**Fix:**
+Use check constraints instead:
+```ruby
+# BEFORE
+t.integer :count, unsigned: true
+
+# AFTER
+t.integer :count
+t.check_constraint "count >= 0"
+```
+
+---
+
+#### .gitignore Update
+
+**Pattern:** `GITIGNORE_KEYS`
+
+**What Changed:**
+Recommended `.gitignore` pattern for credential keys changed.
+
+**Fix:**
+```gitignore
+# BEFORE
+*.key
+
+# AFTER
+/config/*.key
+```
+
+---
+
+#### ignore_leading_brackets Deprecated
+
+**Pattern:** `IGNORE_LEADING_BRACKETS_CONFIG`
+
+**What Changed:**
+On 8.0, `config.action_dispatch.ignore_leading_brackets = true` (or the default under Rack 2) made the parameter parser read `[user][name]=a` as `{"user" => {"name" => "a"}}`. Rails 8.1 removes that behavior: the param is always `{"[user]" => {"name" => "a"}}`. Setting the config now prints a deprecation warning (removal in 8.2) and has no effect. A Rack 2 app gets the new parsing even without the config line.
+
+**Detection Pattern:**
+```ruby
+# config/application.rb
+config.action_dispatch.ignore_leading_brackets = true
+```
+
+**Fix:**
+```ruby
+# BEFORE
+config.action_dispatch.ignore_leading_brackets = true
+# <input name="[user][name]">
+
+# AFTER
+# (config line removed)
+# <input name="user[name]">
+```
+The AFTER works on 8.0 too. Search views and JavaScript for field names that start with `[`.
+
+---
+
+#### to_time_preserves_timezone Deprecated
+
+**Pattern:** `TO_TIME_PRESERVES_TIMEZONE_CONFIG`
+
+**What Changed:**
+On 8.0, `config.active_support.to_time_preserves_timezone` chose what `to_time` kept: `:zone` (the 8.0 default), `:offset` (the default for `load_defaults` below 8.0) or `false` (system local time). Rails 8.1 removes the choice: `to_time` always keeps the receiver's full time zone. Setting the config prints a deprecation warning (removal in 8.2) and has no effect.
+
+**Detection Pattern:**
+```ruby
+# config/application.rb or config/initializers/new_framework_defaults_*.rb
+config.active_support.to_time_preserves_timezone = :offset
+```
+
+**Fix:**
+```ruby
+# BEFORE
+config.active_support.to_time_preserves_timezone = :offset
+
+# AFTER (while dual booting)
+config.active_support.to_time_preserves_timezone = :zone unless NextRails.next?
+```
+`:zone` gives 8.0 the 8.1 behavior, so both sides run the same `to_time`. Delete the line once 8.0 is gone.
+
+---
+
+#### String#mb_chars Deprecated
+
+**Pattern:** `MB_CHARS`
+
+**What Changed:**
+Rails 8.0 offered `String#mb_chars` and `ActiveSupport::Multibyte::Chars` with no warning. Rails 8.1 prints a deprecation warning on each `mb_chars` call and each `Chars.new` (removal in 8.2). The methods still work in 8.1.
+
+**Detection Pattern:**
+```ruby
+name.mb_chars.upcase.to_s
+ActiveSupport::Multibyte::Chars.new(name)
+```
+
+**Fix:**
+```ruby
+# BEFORE
+name.mb_chars.upcase.to_s
+name.mb_chars.decompose.to_s
+name.mb_chars.grapheme_length
+
+# AFTER
+name.upcase
+name.unicode_normalize(:nfd)
+name.grapheme_clusters.length
+```
+The AFTER works on 8.0 too. `Chars#limit` (truncate to a byte count) has no one-call String equivalent; check each use.
+
+---
+
+#### Ruby Version Requirement
+
+**Pattern:** none (the minimum Ruby does not change at this hop)
+
+**What Changed:**
+Nothing. The `rails` 8.1 gemspec requires Ruby `>= 3.2.0`, the same as 8.0, so the Ruby that bundles 8.0 also bundles 8.1. The gemspec sets no upper bound; a Ruby released after 8.1 may need its latest patch release.
+
+**Fix:**
+None needed for this hop. Upgrade Ruby as a separate step, not in the same deploy as the Rails bump.
+
+---
+
+## Migration Steps
+
+### Phase 1: Preparation
+```bash
+git checkout -b rails-81-upgrade
+```
+
+### Phase 2: Gemfile Updates
+```ruby
+# Gemfile
+gem 'rails', '~> 8.1.0'
+gem 'bundler-audit', group: :development
+
+# Update job adapters if using
+gem 'sidekiq', '>= 7.3.3'  # If using Sidekiq
+```
+
+```bash
+bundle update rails
+```
+
+### Phase 3: Fix Breaking Changes
+
+1. **Update database.yml:**
+```yaml
+# Replace pool: with max_connections:
+production:
+  max_connections: 5  # Was: pool: 5
+```
+
+2. **Check SSL configuration:**
+```ruby
+# If NOT using Kamal, uncomment in production.rb:
+config.force_ssl = true
+config.assume_ssl = true
+```
+
+3. **Add bundler-audit:**
+```bash
+bundle add bundler-audit --group development
+```
+
+### Phase 4: Configuration
+```bash
+rails app:update
+```
+
+### Phase 5: Testing
+- Run `bundle audit check --update`
+- Test database connections
+- Verify SSL works correctly
+- Test background jobs
+
+---
+
+## Configuration Migration Checklist
+
+- [ ] `pool:` → `max_connections:` in database.yml
+- [ ] SSL config uncommented (if not using Kamal)
+- [ ] bundler-audit added
+- [ ] Job adapter gems updated
+- [ ] Semicolons replaced with ampersands in URLs
+
+---
+
+## Common Issues — Quick Reference
+
+Error → section lookup for the most common errors encountered during this upgrade:
+
+| Error | See |
+|-------|-----|
+| Deprecation warning for `pool:` in `database.yml`, or `Ambiguous configuration: 'pool' ... and 'max_connections'` | "pool: → max_connections:" — `max_connections: 5`, drop `pool:` |
+| SSL redirect not working in production | "SSL Configuration Commented Out" — uncomment `force_ssl` and `assume_ssl` in `production.rb` |
+| `ArgumentError: Wrong number of arguments (expect 1, got 2)` while drawing routes at boot | "Route With Multiple Paths Raises" — one route call per path |
+| `NoMethodError: undefined method 'ms' for module Benchmark` | "Benchmark.ms Removed" — `ActiveSupport::Benchmark.realtime(:float_millisecond)` |
+| Sidekiq jobs not processing | "Sidekiq Adapter Removed" — `gem 'sidekiq', '>= 7.3.3'` |
+| A request parameter after a `;` in the URL or form body is missing, or the value keeps `;rest=...` | "Semicolon Query Separator Removed" — use `&` |
+| Deprecation warning for `strict_query_string_separator` | "Semicolon Query Separator Removed" — delete the setting |
+
+---
+
+## Security Best Practices
+
+After upgrading, run security checks:
+
+```bash
+# Check for vulnerable gems
+bundle audit check --update
+
+# Run Brakeman for code analysis
+bundle exec brakeman
+
+# Check for outdated gems
+bundle outdated
+```
+
+---
+
+## Resources
+
+- [Rails 8.1 Release Notes](https://guides.rubyonrails.org/8_1_release_notes.html)
+- [bundler-audit](https://github.com/rubysec/bundler-audit)
+- [Kamal Documentation](https://kamal-deploy.org)

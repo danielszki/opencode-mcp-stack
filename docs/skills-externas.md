@@ -3,6 +3,18 @@
 Estas skills foram copiadas de repositórios públicos de terceiros e redistribuídas
 sob suas licenças originais. Os autores e as licenças constam abaixo.
 
+## Skills de registry (autoskills)
+
+| Skill | Autor | Repo | Licença |
+|---|---|---|---|
+| 203 skills de stack | 75 projetos upstream, curados por midudev | https://github.com/midudev/autoskills | CC BY-NC 4.0 (registry) / licença de cada origem |
+
+### autoskills registry (CC BY-NC 4.0)
+Stack curado e auditado de 203 skills que cobrem 118 tecnologias (React, Next.js,
+Vue, Expo, Flutter, Android, Cloudflare, Three.js, GSAP, Rails, Django, Terraform,
+WordPress e mais), com manifesto SHA-256 e parecer de revisão por skill. Detalhes,
+cobertura completa e flags em `docs/autoskills-registry.md`.
+
 ## Instaladas (Apache 2.0)
 
 | Skill | Autor | Repo | Licença |
