@@ -30,6 +30,7 @@ cobertura completa e flags em `docs/autoskills-registry.md`.
 | `hairline-adopt` | Lucas Marques | https://github.com/lucasmarkes/hairline | MIT |
 | `anatomy` | Ryan (@wheresryan22) | https://github.com/wheresryan22/anatomy | MIT |
 | `unslop-ui` | Felipe Basurto | https://github.com/felipebasurto/unslop-ui | MIT |
+| `humanizer` | Siqi Chen | https://github.com/blader/humanizer | MIT |
 
 ### motion-design
 Universal motion design principles for AI agents — timing, easing, choreography,
@@ -48,6 +49,12 @@ Corta os tells de IA de copy de interface e gráficos: eyebrows, numeração 01/
 subtítulos redundantes, legendas que explicam o visível, badges e status dots
 decorativos. Com `--surface` também corrige gradientes, espaçamento fora de escala,
 pesos pesados e movimento decorativo. Detalhes em `docs/unslop-ui.md`.
+
+### humanizer
+Reescreve prosa removendo os padrões de escrita que denunciam IA (não-X-mas-Y,
+fechos de linha única, tríades forçadas, travessões, inflação, vocabulário gasto)
+sem alterar o conteúdo nem a voz do autor. Complementa o `unslop-ui` (prosa vs.
+interface). Detalhes em `docs/humanizer.md`.
 
 ### openmotion (Apache 2.0)
 7 skills de produção de vídeo/motion graphics com o OpenMotion Studio (alternativa
