@@ -32,6 +32,15 @@ cobertura completa e flags em `docs/autoskills-registry.md`.
 | `unslop-ui` | Felipe Basurto | https://github.com/felipebasurto/unslop-ui | MIT |
 | `humanizer` | Siqi Chen | https://github.com/blader/humanizer | MIT |
 | `00-operador-garimpo` … `08-arquitetura-operacao-24-7` (9 skills) | Matheus Mongarde | https://github.com/matheusmongarde/garimpo | MIT |
+| `chicote` | Matheus Mongarde | https://github.com/matheusmongarde/chicote | MIT |
+
+### chicote
+Constrói sites e landing pages que vendem e depois mede a página num Chromium
+de verdade até bater 100: 70 pontos de portões (CTA na dobra, contraste, alvo
+de toque, LCP, CLS, peso, SEO, tipografia, profundidade, eixo) em três
+aparelhos, mais 30 de rubrica com evidência. Exige `npm install` e
+`npm run instalar` (Chromium) para os passos de medição. Detalhes em
+`docs/chicote.md`.
 
 ### garimpo (prospecção e vendas)
 Nove skills de operação comercial de ponta a ponta — do Google Maps ao Pix:

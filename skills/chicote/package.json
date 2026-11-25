@@ -1,0 +1,21 @@
+{
+  "name": "chicote",
+  "version": "1.0.0",
+  "description": "Skill para agentes de IA que constrói sites e sistemas que vendem: história, metáfora do nicho, medidas calculadas para o público e uma chicotada medida num navegador de verdade até 100 pontos.",
+  "license": "MIT",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "instalar": "node scripts/instalar.mjs",
+    "teste": "node scripts/chicotada.mjs exemplos/ruim.html --saida exemplos/saida-ruim; node scripts/chicotada.mjs exemplos/barbearia.html --publico geral --saida exemplos/saida-barbearia --rubrica exemplos/barbearia-rubrica.json; node scripts/chicotada.mjs exemplos/efeitos.html --publico jovem --aparelho forte --saida exemplos/saida-efeitos",
+    "medidas": "node scripts/medidas.mjs",
+    "chicotada": "node scripts/chicotada.mjs",
+    "pexels": "node scripts/pexels.mjs"
+  },
+  "dependencies": {
+    "playwright": "1.61.1"
+  }
+}

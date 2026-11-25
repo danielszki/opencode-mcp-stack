@@ -1,0 +1,14 @@
+{
+  "nota": "Exemplo fictício: a barbearia, as avaliações e o telefone não existem. Num projeto real, a prova precisa ser real.",
+  "itens": [
+    { "id": "nivel", "pontos": 6, "evidencia": "teste do nível (print 1440-inteira.png ao lado de landing pages de primeira linha): 1) Instrument Serif 100px, −0,03em, itálico de duas cores no h1; 2) hero com produto emergindo: agenda, foto e recibo ligados ao CTA por linhas finas, saindo do fundo do painel; 3) as 5 fotos com o mesmo tratamento (.foto: sépia, contraste, véu âmbar); 4) cards mostram: horários, recibo, fotos do ritual, preço; 5) moldura em painéis de 28px, pílulas, padrão de pontos, faixa de números com divisórias, cabeçalho dividido" },
+    { "id": "hero-frase", "pontos": 4, "evidencia": "h1 'Barba feita em 30 minutos, sem fila.': 7 palavras, concreta (30 min), do cliente (sem fila), sem jargão; 3 linhas a 360px (print 360-dobra.png)" },
+    { "id": "roteiro", "pontos": 3, "evidencia": "hero (fisgar) → palco (como marca: horários, prova visual, preço) → números (prova) → ritual (confiança) → declaração (virada) → preços (oferta + CTA) → cena final (onde, quando + CTA). CTA no hero, no pódio, na cena final e na barra fixa do celular" },
+    { "id": "metafora", "pontos": 4, "evidencia": "balcão de navalha: poste listrado na marca, recibo com linha pontilhada no palco, horários como fichas de agenda, preços em pódio com o combo escuro e maior no centro (composição: pódio + bento com hierarquia 1 grande + 2 pequenos)" },
+    { "id": "composicao", "pontos": 3, "evidencia": "eixo central em todo o hero e nos cards; cabeçalhos divididos 7/5 no desktop (exceção texto à esquerda + parágrafo à direita); pódio 1fr auto 1fr com o destaque 28px mais alto; bento 1,4fr/1fr com o bloco 1 em duas linhas" },
+    { "id": "costuras", "pontos": 3, "evidencia": "hero → palco: mesmo painel, o CTA desce em fios até as três peças; palco → números: as peças saem 40px para fora do painel; ritual → declaração → preços: alternância claro/vinho/claro; cena final com foto e véu; cabeçalho na página acima do painel" },
+    { "id": "copy", "pontos": 2, "evidencia": "portão enxuto 3/3, zero jargão; botões: 'Marcar pelo WhatsApp', 'Ver os preços', 'Marcar cabelo e barba', 'Marcar meu horário', 'Ver a rota'" },
+    { "id": "publico", "pontos": 2, "evidencia": "geral/médio: corpo 17px, alvos ≥ 44px (portão 100%), contraste AA em todos os textos, barra fixa no polegar no celular, telefone no 'Ligar'" },
+    { "id": "imagem", "pontos": 3, "evidencia": "5 fotos do Pexels com um só tratamento, alt descritivo, lazy fora da dobra, fetchpriority na do hero; prompts das imagens próprias em barbearia-prompts.md (4 vagas, incluindo o hero em camadas)" }
+  ]
+}

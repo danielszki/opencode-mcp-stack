@@ -1,0 +1,4 @@
+node_modules/
+exemplos/saida-*/
+chicote/
+.DS_Store

@@ -13,7 +13,8 @@ clonado em outra máquina e reinstalado de forma reproduzível.
   origem, licença e instalação em `docs/webscraping-expert.md`) e `unslop-ui`
   (de Felipe Basurto — ver `docs/unslop-ui.md`), `humanizer` (Siqi Chen — ver
   `docs/humanizer.md`), as 9 skills de prospecção do `garimpo`
-  (Matheus Mongarde, MIT — ver `docs/garimpo.md`) e as 7 skills do `openmotion`
+  (Matheus Mongarde, MIT — ver `docs/garimpo.md`), a skill `chicote`
+  (Matheus Mongarde, MIT — ver `docs/chicote.md`) e as 7 skills do `openmotion`
   (nexu-io, Apache 2.0 — ver `docs/openmotion.md`). O grosso é o **registry do
   autoskills**: 203 skills de stack (118 tecnologias) — ver
   `docs/autoskills-registry.md`.

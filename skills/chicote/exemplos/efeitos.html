@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Efeitos do chicote: pontos, holofote, 3D em CSS e traço</title>
+<meta name="description" content="Seis efeitos que substituem imagem sem travar o celular: pontos que reagem ao dedo, holofote, inclinação 3D, maquete em CSS, traço e grão.">
+<meta property="og:image" content="https://github.com/matheusmongarde/chicote/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../efeitos/holofote.css">
+<link rel="stylesheet" href="../efeitos/camadas.css">
+<link rel="stylesheet" href="../efeitos/grao.css">
+<style>
+  :root { --fundo: #0d0f12; --sup: #15181d; --tinta: #eceef2; --tinta-2: #b8bfcc; --ouro: #e9b43c; --azul: #8ea6ff; --e2: 16px; --e3: 24px; --e4: 32px; --e6: 48px; --e8: 64px; --e12: 96px; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--fundo) radial-gradient(80% 50% at 50% 0%, rgb(142 166 255 / .14), transparent 70%) no-repeat; color: var(--tinta); font: 17px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  h1, h2 { font-family: "Bricolage Grotesque", system-ui, sans-serif; font-weight: 700; letter-spacing: -.04em; line-height: 1; margin: 0; }
+  h1 { font-size: clamp(44px, 6vw, 84px); }
+  h2 { font-size: clamp(28px, 3.6vw, 44px); }
+  p { margin: 0; color: var(--tinta-2); max-width: 52ch; }
+  .faixa { max-width: 1200px; margin: 0 auto; padding: var(--e8) clamp(16px, 5vw, 40px); }
+  .rotulo { font: 600 14px/1 ui-monospace, monospace; letter-spacing: .12em; text-transform: uppercase; color: var(--ouro); margin-bottom: var(--e2); display: block; }
+  .cta { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 var(--e4); border-radius: 14px; color: #111; font-weight: 700; text-decoration: none; white-space: nowrap;
+    background-color: var(--ouro); background-image: linear-gradient(180deg, #f6d27a, var(--ouro) 55%, #c98f1e); box-shadow: inset 0 1px 0 rgb(255 255 255 / .6), inset 0 -2px 0 rgb(0 0 0 / .18), 0 10px 24px -8px rgb(233 180 60 / .6), 0 3px 6px rgb(0 0 0 / .4); }
+  .sombra { box-shadow: 0 2px 4px rgb(0 0 0 / .3), 0 24px 48px -12px rgb(0 0 0 / .55), 0 0 0 1px rgb(255 255 255 / .06); }
+  .cta:focus-visible, a:focus-visible { outline: 3px solid var(--azul); outline-offset: 3px; }
+
+  .hero { display: grid; gap: var(--e4); align-items: center; }
+  .hero .campo { aspect-ratio: 1; color: var(--ouro); border-radius: 24px; background: radial-gradient(70% 70% at 30% 20%, #23283a, var(--sup)); touch-action: pan-y; }
+  @media (min-width: 900px) { .hero { grid-template-columns: 7fr 5fr; } }
+
+  /* costura: o card de inclinação sobe por cima da borda do hero */
+  .holofote { --cor-malha: var(--azul); }
+  .holofote .faixa { text-align: center; } .holofote h2, .holofote p { margin-inline: auto; }
+  .inclinavel { position: relative; overflow: hidden; max-width: 420px; margin-inline: auto; text-align: center; padding: var(--e6) var(--e4); border-radius: 22px; background: linear-gradient(160deg, #262c3b, #14171c); box-shadow: inset 0 1px 0 rgb(255 255 255 / .1), inset 0 0 0 1px rgb(142 166 255 / .25), 0 4px 8px rgb(0 0 0 / .3), 0 30px 60px -20px rgb(0 0 0 / .8); }
+  .inclinavel::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: var(--brilho, 0); transition: opacity 300ms; background: radial-gradient(circle at var(--bx, 50%) var(--by, 0%), rgb(255 255 255 / .22), transparent 55%); }
+  .inclinavel b { display: block; font-size: 40px; color: var(--ouro); }
+
+  .duas-fundo { background: radial-gradient(60% 70% at 75% 50%, rgb(233 180 60 / .12), transparent 70%), linear-gradient(180deg, #101318, var(--fundo)); }
+  .duas { display: grid; gap: var(--e6); align-items: center; }
+  @media (min-width: 900px) { .duas { grid-template-columns: 5fr 7fr; } }
+  .traco { width: 100%; height: auto; color: var(--ouro); margin-top: var(--e3); }
+
+  .papel { background: #f3ede1; color: #1b1712; }
+  .papel p { color: #3d3529; }
+  .papel .rotulo { color: #6b3f0c; }
+  .papel { background-color: #f3ede1; background-image: radial-gradient(70% 80% at 50% 0%, #fffaf0, #f3ede1 60%, #e6dbc6); text-align: center; } .papel p { margin-inline: auto; }
+  footer { padding: var(--e6) clamp(16px, 5vw, 40px); color: var(--tinta-2); font-size: 15px; text-align: center; background: radial-gradient(60% 100% at 50% 100%, rgb(233 180 60 / .12), transparent 70%); }
+</style>
+</head>
+<body>
+<main>
+  <section class="faixa hero">
+    <div>
+      <span class="rotulo">1 · pontos.js</span>
+      <h1>Quando não há foto boa, desenhe com código.</h1>
+      <p style="margin:var(--e3) 0">Passe o mouse ou o dedo nos pontos. Menos de 2 KB, e para sozinho quando nada se mexe.</p>
+      <a class="cta" data-cta="principal" href="https://github.com/matheusmongarde/chicote">Ver no GitHub</a>
+    </div>
+    <div class="campo sombra" data-pontos data-passo="26" data-raio="130" aria-hidden="true"></div>
+  </section>
+
+  <section class="holofote">
+    <div class="faixa" style="padding-top:var(--e12)">
+      <span class="rotulo">2 · holofote.css · 3 · inclinacao.js</span>
+      <h2 style="max-width:16ch">A malha acende onde o olho está.</h2>
+      <p style="margin-block:var(--e3) var(--e8)">Malha em CSS puro; o JS só move duas variáveis. Abaixo, o card inclina seguindo o cursor.</p>
+      <article class="inclinavel" data-inclinar data-max="9">
+        <b>R$ 97</b>
+        <p>Card de oferta com reflexo de luz. Só transform. No celular, fica parado.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="duas-fundo"><div class="faixa duas">
+    <div>
+      <span class="rotulo">4 · camadas.css · 5 · revelar.js</span>
+      <h2>Uma planta e uma maquete, sem imagem.</h2>
+      <p style="margin-top:var(--e3)">Seis camadas com translateZ. Gira conforme a página rola; com movimento reduzido, fica parada.</p>
+      <svg class="traco" viewBox="0 0 400 210" aria-hidden="true"><path data-revelar data-duracao="1400" d="M20 40 H380 V190 H20 Z M200 40 V120 M200 150 V190 M20 120 H140 M170 120 H260 M290 120 H380" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linejoin="round"/><path data-revelar d="M20 20 H380 M20 12 V28 M380 12 V28" stroke="currentColor" stroke-width="1.5" fill="none"/><text x="200" y="12" text-anchor="middle" fill="currentColor" font-size="13" font-family="ui-monospace, monospace">12,40 m</text><text x="110" y="85" text-anchor="middle" fill="currentColor" font-size="12" font-family="ui-monospace, monospace">SALA 24 m²</text><text x="290" y="85" text-anchor="middle" fill="currentColor" font-size="12" font-family="ui-monospace, monospace">COZINHA</text></svg>
+    </div>
+    <div class="maquete" style="--n:6"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i></div>
+  </div></section>
+
+  <section class="papel grao">
+    <div class="faixa">
+      <span class="rotulo">6 · grao.css</span>
+      <h2>Papel com matéria, sem baixar nada.</h2>
+      <p style="margin-top:var(--e3)">Grão em SVG inline, estático, 400 bytes.</p>
+    </div>
+  </section>
+</main>
+<footer>chicote · efeitos em <code>efeitos/</code> · MIT</footer>
+<script src="../efeitos/pontos.js" defer></script>
+<script src="../efeitos/holofote.js" defer></script>
+<script src="../efeitos/inclinacao.js" defer></script>
+<script src="../efeitos/revelar.js" defer></script>
+</body>
+</html>

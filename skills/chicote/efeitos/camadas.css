@@ -1,0 +1,47 @@
+/**
+ * chicote · camadas.css: objeto 3D só de CSS. Camadas empilhadas com translateZ (maquete, prédio, pilha de documentos).
+ *
+ *   <div class="maquete" aria-hidden="true" style="--n: 6">
+ *     <i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i>
+ *   </div>
+ *
+ * Zero JS. A rotação acompanha a rolagem (animation-timeline: view()) nos navegadores que suportam;
+ * nos outros, e com movimento reduzido, fica parada no ângulo isométrico. Nada roda sozinho para sempre.
+ */
+.maquete {
+  --lado: min(60vw, 280px);
+  --altura-camada: 14px;
+  --cor: #2b313b;
+  --cor-topo: #e9b43c;
+  width: var(--lado);
+  aspect-ratio: 1;
+  margin: calc(var(--n, 6) * var(--altura-camada)) auto 0;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateX(58deg) rotateZ(-38deg);
+}
+.maquete > i {
+  position: absolute;
+  inset: calc(var(--i) * 4%);
+  border-radius: 6px;
+  background: var(--cor);
+  border: 1px solid rgb(255 255 255 / 0.12);
+  transform: translateZ(calc(var(--i) * var(--altura-camada)));
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.25);
+}
+.maquete > i:last-child {
+  background: var(--cor-topo);
+}
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .maquete {
+      animation: maquete-girar linear both;
+      animation-timeline: view();
+      animation-range: entry 0% exit 100%;
+    }
+    @keyframes maquete-girar {
+      from { transform: rotateX(62deg) rotateZ(-58deg); }
+      to { transform: rotateX(54deg) rotateZ(-18deg); }
+    }
+  }
+}

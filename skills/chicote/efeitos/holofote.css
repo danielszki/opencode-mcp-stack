@@ -1,0 +1,49 @@
+/**
+ * chicote · holofote.css: malha pontilhada em CSS puro com um holofote que segue o cursor.
+ *
+ *   <section class="holofote" style="--cor-malha: #8ea6ff">…</section>
+ *   <script src="efeitos/holofote.js" defer></script>   (só atualiza --x e --y; sem ele, o holofote fica parado no centro)
+ *
+ * Custo: duas camadas de fundo; o JS só muda duas variáveis, no máximo uma vez por quadro.
+ * Troque --malha para mudar o desenho: pontos (padrão), milimetrado (engenharia) ou cruzes (planta).
+ */
+.holofote {
+  --x: 50%;
+  --y: 40%;
+  --passo: 22px;
+  --malha: radial-gradient(currentColor 1.1px, transparent 1.5px);
+  position: relative;
+  isolation: isolate;
+}
+.holofote.milimetrado {
+  --passo: 16px;
+  --malha: linear-gradient(currentColor 1px, transparent 1px), linear-gradient(90deg, currentColor 1px, transparent 1px);
+}
+.holofote::before,
+.holofote::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  color: var(--cor-malha, currentColor); /* a cor da malha não vaza para o texto da seção */
+  background-image: var(--malha);
+  background-size: var(--passo) var(--passo);
+}
+/* malha apagada em toda a área */
+.holofote::before {
+  opacity: 0.14;
+}
+/* malha acesa só dentro do holofote */
+.holofote::after {
+  opacity: 0.85;
+  -webkit-mask-image: radial-gradient(240px circle at var(--x) var(--y), #000 0%, transparent 70%);
+  mask-image: radial-gradient(240px circle at var(--x) var(--y), #000 0%, transparent 70%);
+}
+/* sem mouse ou com movimento reduzido: holofote parado, largo, onde está o conteúdo */
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .holofote::after {
+    -webkit-mask-image: radial-gradient(70% 60% at 50% 35%, #000 0%, transparent 75%);
+    mask-image: radial-gradient(70% 60% at 50% 35%, #000 0%, transparent 75%);
+  }
+}

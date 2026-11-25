@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Barbearia no Cambuí, Campinas | Navalha de Ouro</title>
+<meta name="description" content="Barba na navalha e cabelo com hora marcada no Cambuí. Marque no WhatsApp, chegue na hora e sente sem fila. A partir de R$ 45.">
+<meta property="og:title" content="Barba feita em 30 minutos, sem fila | Navalha de Ouro">
+<meta property="og:description" content="Barbearia no Cambuí, Campinas. Hora marcada pelo WhatsApp.">
+<meta property="og:image" content="https://navalhadeouro.com.br/og.jpg">
+<link rel="canonical" href="https://navalhadeouro.com.br/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BarberShop","name":"Navalha de Ouro","telephone":"+55-19-99812-4471",
+ "address":{"@type":"PostalAddress","streetAddress":"R. Barão de Jaguara, 812","addressLocality":"Campinas","addressRegion":"SP","addressCountry":"BR"},
+ "openingHours":["Tu-Fr 09:00-20:00","Sa 09:00-18:00"],"priceRange":"R$ 45 – R$ 90"}
+</script>
+<!--
+  Exemplo do chicote (negócio fictício). Fotos: Pexels, tratadas com um só filtro (créditos em barbearia-img/CREDITOS.md).
+  Prompts das imagens próprias que substituem as do banco: barbearia-prompts.md.
+  Nível de referência (18-nivel-de-referencia.md): moldura em painéis, Instrument Serif grande e apertada,
+  hero centrado com pílula e par de botões, "produto emergindo" (a agenda do WhatsApp, a foto, o recibo) ligado
+  ao CTA por linhas finas, faixa de números, cabeçalho dividido + bento com fotos, declaração em duas cores,
+  pódio de preços, cena final com foto.
+-->
+<style>
+  :root {
+    --pagina: #e9e2d6; --painel: #16110d; --painel-2: #221a14; --vinho: #3b1714;
+    --papel: #f5efe4; --papel-2: #ebe3d5; --tinta: #1b140f; --tinta-2: #5c5046; --tinta-3: #6b5f53;
+    --creme: #f7f1e6; --creme-2: #c9bdac; --latao: #d6a650; --latao-2: #f0d595;
+    --serif: "Instrument Serif", "Iowan Old Style", Georgia, serif;
+    --sans: "Inter Tight", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --r-painel: 28px; --r-card: 20px;
+    --s1: 0 1px 2px rgb(0 0 0 / .2), 0 2px 6px rgb(0 0 0 / .14);
+    --s2: 0 2px 4px rgb(0 0 0 / .18), 0 14px 28px -8px rgb(0 0 0 / .32), 0 28px 56px -18px rgb(0 0 0 / .38);
+    --s3: 0 4px 10px rgb(0 0 0 / .22), 0 30px 50px -14px rgb(0 0 0 / .5), 0 60px 100px -30px rgb(0 0 0 / .55);
+    --curva: cubic-bezier(.2,.8,.2,1);
+    --margem: clamp(20px, 5vw, 64px);
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; padding: 10px; background-color: var(--pagina); background-image: radial-gradient(60% 40% at 50% 0%, rgb(255 255 255 / .55), transparent 70%); color: var(--tinta); font: 17px/1.55 var(--sans); }
+  h1, h2, h3 { font-family: var(--serif); font-weight: 400; margin: 0; letter-spacing: -.02em; line-height: 1; text-wrap: balance; }
+  p { margin: 0; }
+  a { color: inherit; }
+  img { display: block; max-width: 100%; }
+  :focus-visible { outline: 2px solid var(--latao); outline-offset: 3px; }
+  .apagado { color: var(--tinta-3); }
+
+  /* Fotos: um só tratamento para a página toda (o mesmo "ensaio") */
+  .foto { position: relative; overflow: hidden; background-color: #2a1d15; }
+  .foto img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.82) contrast(1.06) sepia(.14) brightness(.96); }
+  .foto::after { content: ""; position: absolute; inset: 0; background: #b5743c; mix-blend-mode: soft-light; opacity: .38; pointer-events: none; }
+
+  /* Botões: pílula cheia (principal) e fantasma */
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 0 26px; border-radius: 999px; font: 500 17px/1 var(--sans); text-decoration: none; white-space: nowrap; transition: transform 200ms var(--curva), box-shadow 200ms var(--curva), background-color 200ms; }
+  .btn-cheio { color: var(--tinta); background-color: var(--creme); background-image: linear-gradient(180deg, #fffaf1, var(--creme)); box-shadow: inset 0 1px 0 #fff, 0 1px 0 rgb(0 0 0 / .25), 0 10px 30px -10px rgb(240 213 149 / .55), var(--s1); }
+  .btn-escuro { color: var(--creme); background-color: var(--painel); background-image: linear-gradient(180deg, #2b221b, var(--painel)); box-shadow: inset 0 1px 0 rgb(255 255 255 / .12), var(--s2); }
+  .btn-fantasma { color: var(--creme); background: rgb(255 255 255 / .06); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .18); }
+  .btn-claro { color: var(--tinta); background: rgb(255 255 255 / .6); box-shadow: inset 0 0 0 1px rgb(27 20 15 / .14), var(--s1); }
+  .btn .seta { font-size: 1.2em; line-height: 0; transform: translateY(-1px); }
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) { .btn:hover { transform: translateY(-2px); } .btn:active { transform: translateY(0); } }
+
+  .pilula { display: inline-flex; align-items: center; gap: 10px; padding: 7px 14px 7px 8px; border-radius: 999px; font: 500 15px/1 var(--sans); }
+  .pilula b { display: inline-grid; place-items: center; height: 24px; padding: 0 9px; border-radius: 999px; font-weight: 600; font-size: 13px; }
+
+  /* Cabeçalho na página, acima do painel: o painel do hero vira um objeto */
+  .topo { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 16px; padding: 10px var(--margem) 16px; }
+  .marca { display: inline-flex; align-items: center; min-height: 44px; gap: 10px; font: 400 26px/1 var(--serif); letter-spacing: -.01em; white-space: nowrap; text-decoration: none; }
+  .marca i { width: 9px; height: 24px; border-radius: 5px; background: repeating-linear-gradient(-55deg, #a8281f 0 4px, #fbf6ec 4px 8px, #27497f 8px 12px, #fbf6ec 12px 16px); box-shadow: 0 0 0 1.5px var(--tinta); }
+  .nav { display: none; gap: 32px; font-weight: 500; font-size: 16px; }
+  .nav a { text-decoration: none; color: var(--tinta-2); }
+  .topo .btn { min-height: 44px; padding: 0 18px; font-size: 15px; }
+
+  /* PAINEL 1: hero + palco */
+  .painel { border-radius: var(--r-painel); overflow: clip; position: relative; isolation: isolate; }
+  .escuro { background-color: var(--painel); color: var(--creme);
+    background-image: radial-gradient(55% 45% at 50% 0%, rgb(214 166 80 / .18), transparent 70%), radial-gradient(rgb(255 255 255 / .07) 1px, transparent 1.4px);
+    background-size: 100% 100%, 22px 22px; }
+  .hero { display: grid; justify-items: center; text-align: center; gap: 24px; padding: 72px var(--margem) 40px; }
+  .hero .pilula { color: var(--creme-2); background: rgb(255 255 255 / .06); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .12); }
+  .hero .pilula b { color: var(--tinta); background: var(--latao-2); }
+  .hero h1 { font-size: clamp(46px, 6.2vw + 10px, 100px); line-height: .96; letter-spacing: -.03em; max-width: 11ch; }
+  .hero h1 em { color: var(--latao-2); }
+  .hero .apoio { color: var(--creme-2); font-size: 18px; max-width: 34ch; }
+  .acoes { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+
+  /* Palco: o "produto emergindo" do fundo do painel, ligado ao CTA por linhas finas */
+  .palco { position: relative; display: grid; justify-items: center; padding: 0 var(--margem); }
+  .fios { width: min(100%, 560px); height: 56px; color: rgb(255 255 255 / .22); }
+  .pecas { display: grid; gap: 16px; justify-items: center; width: 100%; max-width: 1060px; margin-bottom: 28px; }
+  .peca { border-radius: var(--r-card); box-shadow: var(--s3), 0 0 0 1px rgb(255 255 255 / .08); }
+  .peca.foto { width: min(100%, 440px); aspect-ratio: 4 / 3.4; }
+  .peca .etiqueta { position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 2; white-space: nowrap; color: var(--creme); font: 500 14px/1 var(--sans); padding: 9px 14px; border-radius: 999px; background: rgb(22 17 13 / .74); backdrop-filter: blur(8px); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .14); }
+  .mini { width: min(100%, 300px); background-color: var(--papel); background-image: linear-gradient(180deg, #fffaf2, var(--papel)); color: var(--tinta); padding: 20px; text-align: center; display: grid; gap: 12px; }
+  .mini h3 { font: 600 15px/1 var(--sans); letter-spacing: 0; }
+  .mini .sub { font-size: 13px; color: var(--tinta-3); margin-top: -6px; }
+  .horarios { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .horarios span { padding: 10px 0; border-radius: 10px; font: 600 14px/1 var(--sans); background: #e6dcca; color: var(--tinta-2); text-decoration: line-through; }
+  .horarios span.livre { background: var(--painel); color: var(--creme); text-decoration: none; box-shadow: var(--s1); }
+  .recibo { display: grid; gap: 8px; font-size: 14px; }
+  .recibo div { display: flex; justify-content: space-between; gap: 12px; padding-bottom: 8px; border-bottom: 1px dashed #d6cab6; }
+  .recibo strong { font: 400 40px/1 var(--serif); letter-spacing: -.02em; }
+
+  /* Faixa de números com divisórias */
+  .numeros { display: grid; grid-template-columns: 1fr; text-align: center; padding: 72px var(--margem) 64px; gap: 28px; }
+  .numeros > div { display: grid; gap: 6px; }
+  .numeros strong { font: 400 56px/1 var(--serif); letter-spacing: -.03em; }
+  .numeros span { color: var(--tinta-2); font-size: 16px; }
+
+  /* Seções com cabeçalho dividido */
+  .secao { padding: 56px var(--margem) 96px; }
+  .cab { display: grid; gap: 16px; margin-bottom: 40px; text-align: center; justify-items: center; }
+  .cab h2 { font-size: clamp(40px, 3.4vw + 16px, 68px); letter-spacing: -.025em; line-height: 1; max-width: 13ch; }
+  .cab p { color: var(--tinta-2); max-width: 36ch; font-size: 18px; }
+
+  /* Bento do ritual: fotos tratadas com o texto embaixo, centralizado */
+  .bento { display: grid; gap: 14px; }
+  .bloco { position: relative; border-radius: var(--r-card); min-height: 340px; display: grid; align-content: end; justify-items: center; text-align: center; padding: 28px; color: var(--creme); box-shadow: var(--s2); }
+  .bloco .foto { position: absolute; inset: 0; border-radius: inherit; z-index: -1; }
+  .bloco .foto::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgb(22 17 13 / 0) 35%, rgb(22 17 13 / .88)); }
+  .bloco { isolation: isolate; background-color: var(--painel); }
+  .bloco .n { font: 500 13px/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--latao-2); margin-bottom: 10px; }
+  .bloco h3 { font-size: 40px; letter-spacing: -.02em; }
+  .bloco p { color: var(--creme-2); margin-top: 8px; max-width: 26ch; }
+
+  /* Declaração em duas cores */
+  .declaracao { background-color: var(--vinho); background-image: radial-gradient(60% 70% at 50% 0%, rgb(214 166 80 / .16), transparent 70%); color: var(--creme); text-align: center; padding: 104px var(--margem); }
+  .declaracao p { font: 400 clamp(32px, 3vw + 14px, 58px)/1.08 var(--serif); letter-spacing: -.02em; max-width: 22ch; margin: 0 auto; }
+  .declaracao p span { color: rgb(247 241 230 / .5); }
+
+  /* Preços: pódio, combo no centro, escuro, maior */
+  .precos .podio { display: grid; gap: 16px; justify-items: center; }
+  .preco { width: min(100%, 340px); border-radius: var(--r-card); padding: 32px 28px; display: grid; justify-items: center; text-align: center; gap: 8px; background-color: var(--papel); background-image: linear-gradient(180deg, #fffaf2, var(--papel)); box-shadow: inset 0 1px 0 #fff, inset 0 0 0 1px rgb(27 20 15 / .08), var(--s2); }
+  .preco h3 { font: 600 17px/1 var(--sans); letter-spacing: 0; }
+  .preco .valor { font: 400 64px/1 var(--serif); letter-spacing: -.03em; margin-top: 6px; }
+  .preco .valor small { font-size: .38em; vertical-align: 1.2em; margin-right: 4px; }
+  .preco p { color: var(--tinta-2); font-size: 16px; }
+  .preco .tempo { font: 600 13px/1 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--tinta-3); }
+  .precos .destaque { order: -1; }
+  .preco.destaque { width: min(100%, 380px); padding: 44px 28px 32px; color: var(--creme); background-color: var(--painel); background-image: radial-gradient(80% 60% at 50% 0%, rgb(214 166 80 / .22), transparent 70%), linear-gradient(180deg, #2b221b, var(--painel)); box-shadow: inset 0 1px 0 rgb(255 255 255 / .12), var(--s3); position: relative; }
+  .preco.destaque p { color: var(--creme-2); }
+  .preco.destaque .tempo { color: var(--latao-2); }
+  .preco.destaque .pilula { position: absolute; top: -14px; color: var(--tinta); background: var(--latao-2); padding: 8px 14px; font-size: 13px; box-shadow: var(--s1); }
+  .preco.destaque .btn { margin-top: 16px; }
+
+  /* Cena final: foto em tela cheia com véu, tudo centrado */
+  .cena { position: relative; min-height: 640px; display: grid; place-items: center; text-align: center; padding: 96px var(--margem); color: var(--creme); background-color: var(--painel); }
+  .cena > .foto { position: absolute; inset: 0; z-index: -1; }
+  .cena > .foto::before { content: ""; position: absolute; inset: 0; z-index: 1; background: radial-gradient(70% 60% at 50% 45%, rgb(22 17 13 / .55), rgb(22 17 13 / .9)); }
+  .cena .conteudo { display: grid; justify-items: center; gap: 22px; }
+  .cena h2 { font-size: clamp(44px, 4vw + 16px, 84px); line-height: .98; letter-spacing: -.03em; max-width: 12ch; }
+  .estado { color: var(--creme); background: rgb(255 255 255 / .08); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .16); }
+  .estado b { background: #8a8170; width: 8px; height: 8px; padding: 0; }
+  .estado.aberto b { background: #4ade80; box-shadow: 0 0 0 4px rgb(74 222 128 / .2); }
+  .horas { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 24px; color: var(--creme-2); font-size: 17px; }
+  .horas b { color: var(--creme); font-weight: 600; }
+
+  footer { display: grid; gap: 20px; justify-items: center; text-align: center; padding: 48px var(--margem) 40px; color: var(--tinta-2); font-size: 16px; }
+  footer small { font-size: 14px; color: var(--tinta-3); }
+
+  .barra { position: fixed; left: 10px; right: 10px; bottom: 10px; z-index: 9; display: grid; grid-template-columns: 1fr auto; gap: 8px; padding: 8px; border-radius: 999px; background: rgb(22 17 13 / .9); backdrop-filter: blur(12px); box-shadow: var(--s3), inset 0 0 0 1px rgb(255 255 255 / .1); transition: transform 280ms var(--curva); }
+  .barra.oculta { transform: translateY(140%); }
+  .barra .btn { min-height: 48px; }
+  body { padding-bottom: 84px; }
+
+  @media (min-width: 720px) {
+    .numeros { grid-template-columns: repeat(3, 1fr); gap: 0; }
+    .numeros > div + div { border-left: 1px solid rgb(27 20 15 / .14); }
+  }
+  @media (min-width: 960px) {
+    body { padding: 12px; padding-bottom: 12px; }
+    .nav { display: flex; }
+    .topo { grid-template-columns: 1fr auto 1fr; padding: 14px var(--margem) 18px; }
+    .topo .btn { justify-self: end; }
+    .hero { padding-top: 96px; }
+    .pecas { grid-template-columns: 1fr auto 1fr; align-items: end; gap: 0; margin-bottom: -40px; }
+    .pecas .mini { margin-bottom: 64px; position: relative; z-index: 1; }
+    .pecas .mini:first-child { justify-self: end; margin-right: -36px; padding-right: 56px; transform: rotate(-3deg); }
+    .pecas .mini:last-child { justify-self: start; margin-left: -36px; padding-left: 56px; transform: rotate(3deg); }
+    .pecas .foto { z-index: 2; width: 460px; }
+    .cab { grid-template-columns: 7fr 5fr; text-align: left; justify-items: start; align-items: end; }
+    .cab p { justify-self: end; text-align: right; }
+    .bento { grid-template-columns: 1.4fr 1fr; grid-template-rows: 380px 300px; }
+    .bento .b1 { grid-row: 1 / span 2; }
+    .precos .podio { grid-template-columns: 1fr auto 1fr; align-items: end; gap: 20px; max-width: 1100px; margin: 0 auto; }
+    .precos .p1 { justify-self: end; } .precos .p2 { justify-self: start; }
+    .precos .destaque { order: 0; margin-bottom: 28px; }
+    .barra { display: none; }
+  }
+</style>
+</head>
+<body>
+<header class="topo">
+  <a class="marca" href="#"><i aria-hidden="true"></i>Navalha de Ouro</a>
+  <nav class="nav" aria-label="Seções"><a href="#ritual">O ritual</a><a href="#precos">Preços</a><a href="#onde">Onde fica</a></nav>
+  <a class="btn btn-escuro" href="https://wa.me/5519998124471?text=Ol%C3%A1!%20Quero%20marcar%20um%20hor%C3%A1rio">Agendar</a>
+</header>
+
+<main>
+  <div class="painel escuro">
+    <section class="hero">
+      <span class="pilula"><b>★ 4,9</b>212 avaliações no Google</span>
+      <h1>Barba feita em 30 minutos, <em>sem fila.</em></h1>
+      <p class="apoio">Marque no WhatsApp e sente na hora marcada.</p>
+      <div class="acoes">
+        <a class="btn btn-cheio" data-cta="principal" href="https://wa.me/5519998124471?text=Ol%C3%A1!%20Quero%20marcar%20um%20hor%C3%A1rio">Marcar pelo WhatsApp <span class="seta" aria-hidden="true">›</span></a>
+        <a class="btn btn-fantasma" href="#precos">Ver os preços</a>
+      </div>
+    </section>
+    <section class="palco" aria-label="Como funciona a marcação">
+      <svg class="fios" viewBox="0 0 560 56" fill="none" aria-hidden="true"><path d="M280 0 V22 M280 22 C280 40 120 30 110 56 M280 22 V56 M280 22 C280 40 440 30 450 56" stroke="currentColor" stroke-width="1.2"/><circle cx="280" cy="22" r="3" fill="currentColor"/></svg>
+      <div class="pecas">
+        <div class="peca mini">
+          <h3>Horários de hoje</h3>
+          <p class="sub">escolha no WhatsApp</p>
+          <div class="horarios"><span>14h</span><span class="livre">15h30</span><span class="livre">16h</span><span>17h</span><span class="livre">18h30</span><span>19h</span></div>
+        </div>
+        <figure class="peca foto" style="margin:0">
+          <img src="barbearia-img/barber-shaving-beard-straight-razor-01-640.jpg" srcset="barbearia-img/barber-shaving-beard-straight-razor-01-640.jpg 640w, barbearia-img/barber-shaving-beard-straight-razor-01-1280.jpg 1280w" sizes="(min-width: 960px) 460px, 92vw" width="640" height="800" alt="Barbeiro passando a navalha na barba de um cliente" fetchpriority="high">
+          <figcaption class="etiqueta">Lâmina nova a cada cliente</figcaption>
+        </figure>
+        <div class="peca mini">
+          <h3>Cabelo e barba</h3>
+          <div class="recibo"><div><span>Tempo</span><span>70 min</span></div><div><span>Pagamento</span><span>Pix ou cartão</span></div></div>
+          <strong style="font:400 40px/1 var(--serif)">R$ 90</strong>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <section class="numeros" aria-label="A barbearia em números">
+    <div><strong>4,9 ★</strong><span>212 avaliações no Google</span></div>
+    <div><strong>30 min</strong><span>a barba completa</span></div>
+    <div><strong>9h às 20h</strong><span>de terça a sábado</span></div>
+  </section>
+
+  <section class="secao" id="ritual">
+    <div class="cab">
+      <h2>O ritual, do jeito <em>antigo.</em></h2>
+      <p>Três tempos, sem pressa e sem fila. Você só escolhe o horário.</p>
+    </div>
+    <div class="bento">
+      <article class="bloco b1">
+        <div class="foto"><img src="barbearia-img/barber-hot-towel-shave-01-1280.jpg" width="1280" height="1600" loading="lazy" alt="Barbeiro aplicando toalha quente no rosto do cliente"></div>
+        <span class="n">Primeiro tempo</span><h3>Toalha quente</h3><p>Abre os poros e amacia o fio.</p>
+      </article>
+      <article class="bloco b2">
+        <div class="foto"><img src="barbearia-img/barber-shaving-beard-straight-razor-03-640.jpg" width="640" height="800" loading="lazy" alt="Barbeiro tatuado passando a navalha na barba"></div>
+        <span class="n">Segundo tempo</span><h3>Navalha</h3><p>Lâmina nova, aberta na sua frente.</p>
+      </article>
+      <article class="bloco b3">
+        <div class="foto"><img src="barbearia-img/vintage-barber-chair-leather-02-640.jpg" width="640" height="800" loading="lazy" alt="Cadeira de barbeiro de couro vermelho"></div>
+        <span class="n">Terceiro tempo</span><h3>Acabamento</h3><p>Balm, espelho e o próximo horário.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="painel declaracao">
+    <p>Aqui ninguém espera na cadeira. <span>Você marca no WhatsApp, chega na hora e sai com o próximo horário já marcado.</span></p>
+  </section>
+
+  <section class="secao precos" id="precos">
+    <div class="cab">
+      <h2>O preço está na <em>placa.</em></h2>
+      <p>Sem surpresa na hora de pagar. Pix ou cartão.</p>
+    </div>
+    <div class="podio">
+      <article class="preco p1"><h3>Barba</h3><span class="valor"><small>R$</small>45</span><p>Toalha quente, navalha e balm.</p><span class="tempo">30 min</span></article>
+      <article class="preco destaque"><span class="pilula">O mais pedido</span><h3>Cabelo e barba</h3><span class="valor"><small>R$</small>90</span><p>Os dois numa cadeira só.</p><span class="tempo">70 min</span><a class="btn btn-cheio" data-cta href="https://wa.me/5519998124471?text=Ol%C3%A1!%20Quero%20marcar%20cabelo%20e%20barba">Marcar cabelo e barba</a></article>
+      <article class="preco p2"><h3>Cabelo</h3><span class="valor"><small>R$</small>55</span><p>Tesoura ou máquina, com lavagem.</p><span class="tempo">40 min</span></article>
+    </div>
+  </section>
+
+  <section class="painel cena" id="onde">
+    <div class="foto"><img src="barbearia-img/vintage-barber-chair-leather-01-1280.jpg" width="1280" height="1600" loading="lazy" alt="Cadeira de barbeiro preta no salão"></div>
+    <div class="conteudo">
+      <span class="pilula estado" data-estado><b></b><span>Ter a sáb · 9h</span></span>
+      <h2>Sua cadeira, no <em>seu</em> horário.</h2>
+      <p class="horas"><span><b>Ter a sex</b> 9h às 20h</span><span><b>Sábado</b> 9h às 18h</span></p>
+      <p style="color:var(--creme-2)">R. Barão de Jaguara, 812, Cambuí, Campinas</p>
+      <div class="acoes">
+        <a class="btn btn-cheio" data-cta href="https://wa.me/5519998124471?text=Ol%C3%A1!%20Quero%20marcar%20um%20hor%C3%A1rio">Marcar meu horário <span class="seta" aria-hidden="true">›</span></a>
+        <a class="btn btn-fantasma" href="https://maps.google.com/?q=R.+Bar%C3%A3o+de+Jaguara,+812,+Campinas">Ver a rota</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <a class="marca" href="#"><i aria-hidden="true"></i>Navalha de Ouro</a>
+  <p>(19) 99812-4471 · R. Barão de Jaguara, 812, Cambuí</p>
+  <small>CNPJ 00.000.000/0001-00 · Fotos ilustrativas: Pexels</small>
+</footer>
+
+<nav class="barra oculta" aria-label="Contato rápido">
+  <a class="btn btn-cheio" data-cta href="https://wa.me/5519998124471?text=Ol%C3%A1!%20Quero%20marcar%20um%20hor%C3%A1rio">Marcar horário</a>
+  <a class="btn btn-fantasma" href="tel:+5519998124471" aria-label="Ligar para a barbearia">Ligar</a>
+</nav>
+<script>
+  const barra = document.querySelector(".barra"), principal = document.querySelector('[data-cta="principal"]');
+  if ("IntersectionObserver" in window) new IntersectionObserver(([e]) => barra.classList.toggle("oculta", e.isIntersecting || e.boundingClientRect.top > 0)).observe(principal);
+  else barra.classList.remove("oculta");
+  (() => {
+    const agora = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Sao_Paulo" }));
+    const d = agora.getDay(), h = agora.getHours() + agora.getMinutes() / 60;
+    const fecha = d >= 2 && d <= 5 ? 20 : d === 6 ? 18 : 0;
+    const aberto = fecha && h >= 9 && h < fecha;
+    const texto = aberto ? `Aberto agora · até ${fecha}h` : d === 0 || d === 1 || (d === 6 && h >= 18) ? "Abre terça, às 9h" : h < 9 ? "Abre hoje, às 9h" : "Abre amanhã, às 9h";
+    document.querySelectorAll("[data-estado]").forEach((el) => { el.classList.toggle("aberto", !!aberto); el.querySelector("span").textContent = texto; });
+  })();
+</script>
+</body>
+</html>
