@@ -31,6 +31,15 @@ cobertura completa e flags em `docs/autoskills-registry.md`.
 | `anatomy` | Ryan (@wheresryan22) | https://github.com/wheresryan22/anatomy | MIT |
 | `unslop-ui` | Felipe Basurto | https://github.com/felipebasurto/unslop-ui | MIT |
 | `humanizer` | Siqi Chen | https://github.com/blader/humanizer | MIT |
+| `00-operador-garimpo` … `08-arquitetura-operacao-24-7` (9 skills) | Matheus Mongarde | https://github.com/matheusmongarde/garimpo | MIT |
+
+### garimpo (prospecção e vendas)
+Nove skills de operação comercial de ponta a ponta — do Google Maps ao Pix:
+prospecção fria multi-canal, pesquisa de lead, negociação consultiva, quebra de
+objeções, follow-up, lista negra/anti-jargão, psicologia por perfil e
+arquitetura de operação 24/7. A `00-operador-garimpo` opera o sistema garimpo
+pela API `/api/v1`; as `01`–`08` são as mesmas do repo `skill-prospeccao`.
+Detalhes em `docs/garimpo.md`.
 
 ### motion-design
 Universal motion design principles for AI agents — timing, easing, choreography,
