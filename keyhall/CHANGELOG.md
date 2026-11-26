@@ -1,0 +1,159 @@
+# Changelog
+
+All notable changes to keyhall are documented here. The format is based on
+[Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project follows
+[Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [0.3.0] - 2026-11-25
+
+### Added
+
+- **Team**: invite people to an organization by link (7 days, single use), and grant each one
+  connections (all tools or only some), scopes, secrets and skills. They sign in with a password or
+  Google, see only what was granted (names only, no credentials), and make their own tokens or
+  approve MCP clients by OAuth within it. Grants are checked on every call; removing a member
+  ends their tokens.
+- **Approval per tool**: in a connection's menu, pick which tools wait for an admin on each
+  call. Requests show up on the new **Approvals** page with the token, its owner and the
+  arguments; the call waits up to 45 s, then the agent is told to repeat it, and an approval
+  holds for that exact call for 15 minutes, once. Both times are set on **Approvals → Timing**
+  (starting values from `KEYHALL_APPROVAL_WAIT_SECONDS` and `KEYHALL_APPROVAL_VALID_MINUTES`).
+- **Notifications**: **Approvals → Notifications** announces each new request on Telegram,
+  ntfy, Discord, Slack or a signed webhook, with a link to approve it. Arguments are sent only
+  where you turn them on. Channel credentials are encrypted and covered by key rotation.
+- **Google Workspace MCP & static OAuth clients**: remote MCP connections now accept a static
+  OAuth client ID and secret (including vault references) for servers without dynamic client
+  registration. Added official Google Workspace MCP entries (`workspacemcp`, `tasksmcp`,
+  `gmailmcp`, `drivemcp`, `docsmcp`, `sheetsmcp`, `calendarmcp`) with one-click Google Auth
+  Platform setup links.
+- **Versioned Skills over MCP (`io.modelcontextprotocol/skills`)**: create, import (skill folder,
+  `SKILL.md` or `.zip`/`.skill`), version (`1.0`, `1.1`, `2.0`…), inspect and roll back Agent
+  Skills on the new **Skills** page, scoped per project, scope or member. Served on `/mcp` via
+  `skills/list`, `skills/get`, `resources/list`, `resources/read` and `resources/directory/read`
+  with SHA-256 digests and pinned version URIs (`skill://v<ver>/<slug>/SKILL.md`).
+
+## [0.2.0] - 2026-11-17
+
+### License
+
+- keyhall moves from the PolyForm Noncommercial License 1.0.0 to the **GNU AGPL 3.0 only**,
+  with two terms in NOTICE: modified versions keep a "Based on keyhall" attribution in their
+  interface, and the license grants no rights to the keyhall name or logo. Any use is allowed,
+  commercial included; whoever runs a modified version for others over a network must offer
+  them its source. The account menu shows the license, the absence of warranty and a link to
+  the source. Released versions keep their license.
+
+### Added
+
+- **OAuth for MCP clients**: `/mcp` now follows the MCP authorization spec (resource and
+  server metadata, dynamic client registration, PKCE). A client connects with just the URL;
+  you approve it in the panel, choosing its reach like a token, and it gets a regular keyhall
+  token listed on the Tokens page. An invalid token on `/mcp` now answers `401` instead of `403`.
+- **Sign in with Google**: with `KEYHALL_GOOGLE_CLIENT_ID` and `KEYHALL_GOOGLE_CLIENT_SECRET`
+  set, the sign-in page offers **Continue with Google**. It never creates accounts: the Google
+  account must have a keyhall user's e-mail, or be linked from the account menu.
+- **OpenAPI spec from a file**: an HTTP API connection takes its spec as a URL or as an
+  uploaded JSON file (pick or drop it in the form). A file stays as uploaded, so a trimmed copy
+  exposes only the routes you want; uploading another file or entering a URL replaces it.
+- **Connection catalog**: **New connection** opens a searchable catalog of well-known services
+  with their own icons, such as Notion, Linear, Atlassian, Cloudflare, Sentry, Stripe and
+  Supabase. One click fills in the address or command, and the form asks only for what that
+  service needs: nothing for OAuth servers, a key for the others. **Custom** keeps the full
+  form for anything else.
+  Entries already in use in the project show how many connections they have (green when
+  connected, amber while waiting for sign-in), also for connections made with the custom form
+  at the same address.
+- **Native plugins**: tools that keyhall implements itself, behind one interface (fields,
+  features, OAuth 2.0 with the admin's own client, tools). The first is Google: Gmail, Drive,
+  Sheets and Calendar over the REST APIs. It works with personal Gmail accounts, which Google's own MCP
+  servers don't accept. Each feature requests only the scopes its tools need, and the client
+  secret may be a vault reference. Setup guide in [docs/google.md](docs/google.md).
+- **Code Mode**, a tool mode per token, and the default for new tokens. The consumer sees two
+  tools whatever the token reaches:
+  - `search` finds tools and shows their inputs as TypeScript types;
+  - `execute` runs agent-written JavaScript that calls them and returns only the result;
+    `tools()` inside it gives the code the whole catalog, to find tools by its own criteria
+    when the word ranking of `search` misses them.
+
+  The code runs in a QuickJS WebAssembly sandbox, limited in time, memory and calls. Existing
+  tokens keep listing every tool and can be switched from the token's menu.
+- **Sign in on a phone** with a QR code. Each code works once and expires in 60 seconds. The
+  phone gets a session of its own, and the same dialog lists signed-in devices so each can be
+  signed out.
+- **Fixed headers on remote MCP connections**, under **Advanced** in the connection form, for
+  servers that take a key instead of OAuth. Values are encrypted and may reference the vault
+  (`Bearer {{secret:KEY}}`); a fixed `Authorization` turns OAuth off for that connection. A
+  remote server's `mcpServers` snippet (`url` and `headers`) pasted in the Local tab can be
+  turned into such a connection.
+
+### Changed
+
+- **Sign-in and first-run screens:** the page is the wall, and the brand's arched doorway is cut
+  into it beside the form (above it on phones), drawn live in WebGL. Its light is dithered into
+  the brand ambers around the arch and fades into the page color. The light answers the form:
+  - it grows when a field has focus and flares on each key;
+  - it floods the page while signing in, and falters when sign-in fails;
+  - the floor light leans toward the pointer.
+
+  A still frame replaces the motion when the system asks for reduced motion.
+- **Panel type and details:**
+  - Figtree for the interface and Geist Mono for code; the wordmark keeps Varela Round;
+  - section labels in sentence case;
+  - neutral connection initials and token icons, so amber marks only actions and selection;
+  - no blur on the top bar and no shadows on dark surfaces;
+  - smaller radii and lighter heading weights.
+- Panel layout on phones:
+  - secret and token rows keep their menu next to the name;
+  - code samples wrap;
+  - segmented controls fit their labels;
+  - project menus are always visible on touch screens.
+
+## [0.1.0] - 2026-10-23
+
+First public release.
+
+### Added
+
+- **MCP gateway:** a single Streamable HTTP endpoint (`/mcp`) that aggregates the tools of every
+  connection a token reaches, prefixed with the connection name.
+- **Connections:**
+  - remote MCP servers with OAuth (dynamic client registration, PKCE, refresh);
+  - local MCP servers started by command, pasted as `mcpServers` JSON, with encrypted `env`;
+  - HTTP APIs with a stored key; with an OpenAPI 3 spec, each operation becomes a tool.
+- **HTTP proxy** (`/api/proxy/<project>/<connection>/…`) that injects the stored API key.
+- **Organizations, projects and scopes**, with tokens that reach an organization, a project,
+  or a scope with hand-picked connections and tools.
+- **Secrets vault:**
+  - envelope encryption with full version history;
+  - `{{secret:NAME}}` references in connections;
+  - REST access for scripts (`/api/secrets`, `?format=env`);
+  - opt-in MCP tools for agents;
+  - every read logged.
+- **Panel** in English and Portuguese, with light and dark themes. It covers:
+  - browsing tools and their parameters;
+  - client configuration snippets;
+  - changing the password.
+- **First-run setup** protected by a one-time code printed in the server log; sign-up closed
+  afterwards.
+- **Maintenance scripts:**
+  - consistent online backup;
+  - password reset;
+  - encryption key rotation.
+- `KEYHALL_ALLOW_STDIO` to disable local connections.
+- Docker image for `linux/amd64` and `linux/arm64` with a health check, plus deployment files:
+  - default compose;
+  - Caddy with automatic HTTPS;
+  - Tailscale sidecar;
+  - systemd unit.
+- `/api/health` reports the running version.
+- End-to-end test suite, and CI and security workflows for pull requests:
+  - CodeQL;
+  - Gitleaks;
+  - dependency review;
+  - Grype image scan;
+  - OpenSSF Scorecard.
+- Images published with SBOM and provenance attestations.
+
+[Unreleased]: https://github.com/luizgustavosaraiva/keyhall/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/luizgustavosaraiva/keyhall/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/luizgustavosaraiva/keyhall/releases/tag/v0.1.0

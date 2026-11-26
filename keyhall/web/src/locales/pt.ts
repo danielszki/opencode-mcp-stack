@@ -1,0 +1,690 @@
+import type { en } from "./en"
+
+// Textos do painel em português do Brasil. Toda chave de en.ts precisa existir aqui.
+export const pt: Record<keyof typeof en, string> = {
+  "account.googleLinked": "Conta Google vinculada",
+  "account.googleLink": "Entrar também com Google",
+  "account.googleFailed": "Não foi possível vincular a conta Google.",
+  "account.changePassword": "Trocar senha",
+  "account.language": "Idioma",
+  "account.legal":
+    "Baseado no keyhall de Luiz Gustavo Saraiva. Software livre sob a GNU AGPL 3.0, sem garantia.",
+  "account.signOut": "Sair",
+  "account.source": "Código-fonte e licença",
+  "account.theme": "Tema",
+
+  "api.baseUrl": "URL base",
+  "api.editHint":
+    "Deixe a chave em branco para manter a atual. Com URL, salvar baixa a especificação de novo.",
+  "api.header": "Cabeçalho da chave",
+  "api.key": "Chave da API",
+  "api.prefix": "Prefixo",
+  "api.prefixHint":
+    'Vai antes da chave: "Bearer " para Authorization, vazio quando o cabeçalho leva só a chave.',
+  "api.spec": "Especificação OpenAPI",
+  "api.specChoose": "Escolha um arquivo JSON ou solte aqui",
+  "api.specCurrent": "Arquivo enviado em uso. Escolha outro para substituir.",
+  "api.specFile": "Arquivo",
+  "api.specFileHint":
+    "Um arquivo JSON OpenAPI 3. Envie uma cópia só com as rotas que você quer: cada operação vira uma ferramenta MCP que pode ser liberada por escopo.",
+  "api.specHint":
+    "Cada operação vira uma ferramenta MCP que pode ser liberada por escopo. Sem especificação, a API só passa pela rota /api/proxy, inteira.",
+  "api.specInvalid": "Este arquivo não é uma especificação OpenAPI 3 em JSON.",
+  "api.specOperations": "{n} operações",
+  "api.specOperations_one": "1 operação",
+
+  "authorize.approve": "Permitir",
+  "authorize.deny": "Negar",
+  "authorize.description":
+    "Escolha o que ele alcança. Ele recebe um token como os da página Tokens e volta para {host}.",
+  "authorize.loading": "Autorizar acesso",
+  "authorize.org": "Organização",
+  "authorize.revokeHint":
+    "O token aparece na página Tokens, onde você pode revogá-lo quando quiser.",
+  "authorize.title": "Permitir que {client} acesse o keyhall?",
+  "auth.tagline":
+    "Uma porta para cada servidor MCP, API e segredo que seus agentes usam",
+
+  "catalog.back": "Voltar",
+  "catalog.connected": "{n} conectadas",
+  "catalog.connected_one": "1 conectada",
+  "catalog.custom": "Personalizada",
+  "catalog.customDescription":
+    "Qualquer servidor MCP, API HTTP ou comando local",
+  "catalog.description":
+    "Escolha um serviço para conectar em um clique, ou crie uma conexão personalizada.",
+  "catalog.empty":
+    "Nada encontrado. Use Personalizada para conectar pelo endereço.",
+  "catalog.getKey": "Onde pegar a chave",
+  "catalog.oauthHint":
+    "Ao criar a conexão, o {name} abre para você entrar e autorizar o keyhall.",
+  "catalog.optionalKey": "{label} (opcional)",
+  "catalog.optionalKeyHint":
+    "Deixe vazio para entrar com a sua conta {name}. A chave serve para contas ou ambientes sem login pelo navegador.",
+  "catalog.pending": "{n} pendentes",
+  "catalog.pending_one": "1 pendente",
+  "catalog.search": "Buscar serviços",
+  "common.cancel": "Cancelar",
+  "common.copied": "Copiado",
+  "common.copy": "Copiar",
+  "common.create": "Criar",
+  "common.delete": "Excluir",
+  "common.done": "Concluir",
+  "common.email": "E-mail",
+  "common.keepCurrent": "manter o valor atual",
+  "common.loading": "Carregando…",
+  "common.more": "Mais ações",
+  "common.name": "Nome",
+  "common.password": "Senha",
+  "common.rename": "Renomear",
+  "common.save": "Salvar",
+  "common.working": "Aguarde…",
+
+  "connections.configure": "Configurar",
+  "connections.connect": "Conectar",
+  "connections.connected": "{name} conectado",
+  "connections.deleteDescription":
+    "Os consumidores perdem as ferramentas dela na hora. Não dá para desfazer.",
+  "connections.deleteInScopes":
+    'Ela sai destes escopos: {scopes}. Os tokens deles perdem as ferramentas dela até você incluí-la de novo. Para renovar a autorização, use "Reconectar".',
+  "connections.deleteTitle": "Excluir {name}?",
+  "connections.description":
+    "Servidores MCP e APIs que o keyhall acessa em nome dos consumidores. As credenciais ficam cifradas aqui.",
+  "connections.emptyDescription":
+    "Adicione um servidor MCP remoto, uma API HTTP com especificação OpenAPI ou um comando MCP local.",
+  "connections.emptyTitle": "Nenhuma conexão ainda",
+  "connections.move": "Mover",
+  "connections.moved": "{name} movida para {project}",
+  "connections.moveDescription":
+    "A conexão sai dos escopos do projeto atual. Escopos da organização continuam com ela.",
+  "connections.moveTarget": "Projeto de destino",
+  "connections.moveTitle": "Mover {name}",
+  "connections.new": "Nova conexão",
+  "connections.newIn": "Nova conexão em {project}",
+  "connections.reconnect": "Reconectar",
+  "connections.rename": "Renomear conexão",
+  "connections.restart": "Reiniciar",
+  "connections.slugHint":
+    "Prefixo das ferramentas: {slug}__nome_da_ferramenta.",
+  "connections.title": "Conexões",
+  "connections.tools": "Ferramentas",
+  "connections.type": "Tipo de conexão",
+  "connections.updated": "{name} atualizada",
+  "connections.url": "URL do servidor",
+
+  "devices.description":
+    "Aponte a câmera do celular para o código para entrar nele. Cada aparelho ganha uma sessão própria.",
+  "devices.expired": "Código expirado. Toque para gerar outro",
+  "devices.expiresIn": "Vale para um uso, por mais {n} segundos",
+  "devices.expiresIn_one": "Vale para um uso, por mais 1 segundo",
+  "devices.failed": "Não deu certo. Tente de novo.",
+  "devices.linkFailed":
+    "Este código de entrada é inválido ou expirou. Gere outro.",
+  "devices.linked": "Novo aparelho conectado",
+  "devices.localhost":
+    "Este painel está aberto como localhost, que o celular não alcança. Abra-o por um endereço que o celular alcance e escaneie de novo.",
+  "devices.menu": "Entrar no celular",
+  "devices.oneUse": "Cada código funciona uma vez e expira em um minuto.",
+  "devices.signOut": "Desconectar este aparelho",
+  "devices.signedIn": "Aparelhos conectados",
+  "devices.since": "Desde {date}",
+  "devices.thisDevice": "Este aparelho",
+  "devices.title": "Entrar no celular",
+
+  "kind.api": "API HTTP",
+  "kind.apiDescription":
+    "API HTTP com chave fixa. A chave fica cifrada no keyhall e nunca chega aos consumidores.",
+  "kind.mcp": "MCP remoto",
+  "kind.mcpDescription":
+    "Servidor MCP remoto (Streamable HTTP), autorizado por OAuth logo depois de criado, ou por uma chave em Avançado.",
+  "kind.native": "Nativo",
+  "kind.nativeDescription":
+    "Ferramentas que o próprio keyhall implementa, com o seu cliente OAuth.",
+  "kind.stdio": "Local",
+  "kind.stdioDescription":
+    "Servidor MCP local (npx, node) que o keyhall roda e repassa. Use só pacotes em que você confia: o processo roda dentro do servidor do keyhall.",
+
+  "login.or": "ou",
+  "login.googleFailed":
+    "Essa conta Google não está vinculada a nenhum usuário do keyhall. Entre com a senha e vincule pelo menu da conta.",
+  "login.google": "Continuar com Google",
+  "login.description": "Use a sua conta de administrador",
+  "login.failed": "Não foi possível entrar",
+  "login.pending": "Entrando…",
+  "login.submit": "Entrar",
+  "login.title": "Entrar",
+
+  "mcp.addHeader": "Adicionar cabeçalho",
+  "mcp.advanced": "Avançado",
+  "mcp.editHint":
+    "Valores em branco mantêm o atual; remover uma linha apaga o cabeçalho. Salvar reconecta.",
+  "mcp.headerName": "Nome do cabeçalho",
+  "mcp.headers": "Cabeçalhos",
+  "mcp.headersHint":
+    "Enviados em toda chamada ao servidor e cifrados no keyhall. Um Authorization fixo substitui o OAuth, para servidores que usam chave.",
+  "mcp.oauthClient": "Cliente OAuth (opcional)",
+  "mcp.oauthClientHint":
+    "Para servidores MCP sem registro dinâmico de cliente (como os do Google). Deixe em branco para registrar automaticamente.",
+  "mcp.oauthClientId": "ID do cliente OAuth",
+  "mcp.oauthClientSecret": "Chave secreta do cliente OAuth",
+  "mcp.removeHeader": "Remover cabeçalho",
+
+  "native.badName":
+    "O nome do cliente aceita letras maiúsculas, números e _, começando por uma letra.",
+  "native.client": "Cliente OAuth",
+  "native.clientName": "Nome no cofre",
+  "native.clientNameHint":
+    "Os valores são salvos como secrets deste projeto com os sufixos {names}, e outras conexões podem usá-los.",
+  "native.console": "Criar o cliente no console",
+  "native.editHint": "Escolha outro cliente salvo ou adicione um novo.",
+  "native.guide": "Guia de configuração",
+  "native.nameTaken": "Já existem secrets com o nome {name} neste projeto.",
+  "native.newClient": "Novo cliente",
+  "native.newHint":
+    "Crie um cliente OAuth (Aplicativo da Web) no provedor e cole aqui o ID e a chave secreta.",
+  "native.reauth": "Trocar o cliente pede o login de novo.",
+  "native.redirect": "URI de redirecionamento",
+  "native.redirectHint":
+    "Adicione nos URIs de redirecionamento autorizados do seu cliente OAuth (Aplicativo da Web).",
+  "native.savedClient": "Cliente salvo",
+  "native.savedHint": "O mesmo cliente pode servir várias conexões.",
+  "native.usedBy": "{name} · usado por {by}",
+  "nav.connections": "Conexões",
+  "nav.manage": "Gerenciar",
+  "nav.menu": "Abrir menu",
+  "nav.scopes": "Escopos",
+  "nav.skills": "Skills",
+  "nav.tokens": "Tokens",
+
+  "oauth.expired": "Autorização inválida ou expirada; tente de novo",
+  "oauth.failed": "Falha ao autorizar {name}",
+  "oauth.ok": "{name} conectado",
+
+  "org.delete": "Excluir organização",
+  "org.deleteDescription":
+    "Só dá para excluir organizações vazias: remova os projetos e escopos dela antes.",
+  "org.deleteTitle": "Excluir {name}?",
+  "org.label": "Organização",
+  "org.new": "Nova organização",
+  "org.newDescription":
+    "Organizações separam por completo projetos, conexões, escopos e tokens.",
+  "org.plural": "Organizações",
+  "org.rename": "Renomear organização",
+  "org.slugHint": "Usado em URLs e identificadores; não muda depois.",
+  "org.switch": "Trocar de organização",
+
+  "password.changed": "Senha trocada. As outras sessões foram encerradas.",
+  "password.confirm": "Confirme a nova senha",
+  "password.current": "Senha atual",
+  "password.description":
+    "Pelo menos 8 caracteres. Outros navegadores conectados a esta conta serão desconectados.",
+  "password.failed": "Não foi possível trocar a senha",
+  "password.mismatch": "As novas senhas não conferem",
+  "password.new": "Nova senha",
+  "password.submit": "Trocar senha",
+
+  "project.all": "Todos os projetos",
+  "project.deleteDescription":
+    "Só dá para excluir projetos vazios: mova ou exclua as conexões e os escopos dele antes.",
+  "project.deleteTitle": "Excluir {name}?",
+  "project.label": "Projeto",
+  "project.new": "Novo projeto",
+  "project.newDescription":
+    "Conexões, escopos e tokens ficam separados por projeto.",
+  "project.newIn": "Novo projeto em {org}",
+  "project.plural": "Projetos",
+  "project.rename": "Renomear projeto",
+  "project.slugHint":
+    "Aparece no nome das ferramentas em tokens da organização: {slug}__stripe__…",
+
+  "rename.description":
+    "Só o nome exibido muda; o identificador fica, então nomes de ferramentas e tokens continuam valendo.",
+
+  "scopes.allTools": "Todas as ferramentas",
+  "scopes.allToolsHint": "Inclusive as que a conexão ganhar depois",
+  "scopes.chipAll": "todas",
+  "scopes.chipCount": "{n} ferramentas",
+  "scopes.chipCount_one": "1 ferramenta",
+  "scopes.clear": "Limpar",
+  "scopes.connections": "Conexões",
+  "scopes.createConnectionFirst": "Crie uma conexão primeiro.",
+  "scopes.deleteDescription":
+    "Os tokens deste escopo param de funcionar na hora.",
+  "scopes.deleteTitle": "Excluir {name}?",
+  "scopes.descriptionOrg":
+    "Escopos da organização podem juntar conexões de projetos diferentes; o projeto entra no nome das ferramentas.",
+  "scopes.descriptionProject":
+    "Um escopo é um conjunto escolhido de conexões e ferramentas de {project}. Cada token só enxerga o seu escopo.",
+  "scopes.edit": "Editar ferramentas",
+  "scopes.editorDescription":
+    "Os consumidores deste escopo só enxergam as conexões e ferramentas marcadas.",
+  "scopes.emptyDescription":
+    "Crie um escopo para dar a um consumidor só as ferramentas de que ele precisa.",
+  "scopes.emptyTitle": "Nenhum escopo ainda",
+  "scopes.include": "Incluir conexão",
+  "scopes.levelOrg": "Organização inteira",
+  "scopes.levelProject": "Projeto {project}",
+  "scopes.new": "Novo escopo",
+  "scopes.noConnections": "Sem conexões",
+  "scopes.noneSelected":
+    "Nenhuma marcada: o escopo não verá ferramentas desta conexão.",
+  "scopes.notIncluded": "Não incluída",
+  "scopes.notIncludedHint": "{name} ainda não foi incluída.",
+  "scopes.pickConnection":
+    "Escolha uma conexão à esquerda para marcar as ferramentas dela.",
+  "scopes.rename": "Renomear escopo",
+  "scopes.selectAll": "Marcar todas",
+  "scopes.selectedOf": "{n} de {total} marcadas",
+  "scopes.skillCount": "{n} skills",
+  "scopes.skills": "Skills",
+  "scopes.slugHintOrg": "Escopo da organização {org}.",
+  "scopes.slugHintProject": "Escopo do projeto {project}.",
+  "scopes.summary": "{n} conexões neste escopo",
+  "scopes.summary_one": "1 conexão neste escopo",
+  "scopes.title": "Escopos",
+
+  "skills.activate": "Ativar v{version}",
+  "skills.activated": "{slug} agora está servindo a v{version}",
+  "skills.active": "ativa",
+  "skills.addFile": "Adicionar arquivo",
+  "skills.body": "Instruções (corpo do SKILL.md)",
+  "skills.bodyHint":
+    "Instruções em Markdown carregadas sob demanda pelo agente. O frontmatter YAML (name, description, version) é gerado automaticamente.",
+  "skills.bodyPlaceholder":
+    "# Fluxo\n\n1. Verifique os dados de entrada.\n2. Execute as ferramentas necessárias.\n3. Valide o resultado.",
+  "skills.bump": "Versão",
+  "skills.bumpCustom": "Personalizada",
+  "skills.bumpMajor": "Major (v{version})",
+  "skills.bumpMinor": "Minor (v{version})",
+  "skills.changelog": "Nota da alteração (opcional)",
+  "skills.changelogPlaceholder": "O que mudou nesta versão?",
+  "skills.created": "Skill {slug} v{version} criada",
+  "skills.customVersion": "Número da versão",
+  "skills.deleteDescription":
+    "Exclui {slug} e todas as suas {n} versões. Os agentes deixarão de enxergá-la via MCP.",
+  "skills.deleteTitle": "Excluir {slug}?",
+  "skills.description": "Descrição",
+  "skills.descriptionHint":
+    "Mostrada aos agentes na descoberta (~100 tokens) para saberem quando carregar esta skill.",
+  "skills.descriptionOrg":
+    "Agent Skills versionadas servidas via MCP (io.modelcontextprotocol/skills) em todos os projetos.",
+  "skills.descriptionPlaceholder":
+    "Processar reembolsos de clientes seguindo a política da empresa",
+  "skills.descriptionProject":
+    "Agent Skills versionadas servidas via MCP (io.modelcontextprotocol/skills) em {project}.",
+  "skills.editFrom": "Nova versão a partir da v{version}",
+  "skills.emptyDescription":
+    "Publique Agent Skills reutilizáveis e versionadas via MCP. Clientes descobrem via skills/list e carregam o SKILL.md sob demanda.",
+  "skills.emptyTitle": "Nenhuma skill ainda",
+  "skills.fileContent": "Conteúdo do arquivo",
+  "skills.filePath": "Caminho (ex.: references/guide.md)",
+  "skills.files": "Arquivos auxiliares",
+  "skills.filesCount": "{n} arquivos",
+  "skills.filesHint":
+    "Referências, templates ou scripts opcionais enviados junto com o SKILL.md e verificados por hash SHA-256.",
+  "skills.history": "Versões",
+  "skills.historyDescription":
+    "Cada edição salva gera uma versão imutável. Troque ou volte a versão ativa quando quiser.",
+  "skills.importDrop": "Arraste uma pasta de skill, SKILL.md ou .zip aqui",
+  "skills.importFile": "SKILL.md / .zip",
+  "skills.importFolder": "Escolher pasta",
+  "skills.importHint":
+    "Lê o frontmatter YAML (name, description, version) e carrega todos os arquivos auxiliares automaticamente.",
+  "skills.importLoaded": "Importado {source} · {n} arquivos auxiliares",
+  "skills.importLoaded_one": "Importado {source} · 1 arquivo auxiliar",
+  "skills.importLoadedNone": "Importado {source}",
+  "skills.importSkippedBinary":
+    "{n} arquivos binários ignorados (apenas arquivos de texto UTF-8 são incluídos).",
+  "skills.initialVersion": "Versão inicial",
+  "skills.makeActive": "Definir como versão ativa imediatamente",
+  "skills.makeActiveHint":
+    "Agentes que lerem a URI canônica passam a receber esta versão assim que ela for salva.",
+  "skills.mcpUri": "URI MCP",
+  "skills.new": "Nova skill",
+  "skills.newDescription":
+    "Crie uma Agent Skill versionada servida via MCP por skills/list, skills/get e resources/read.",
+  "skills.newVersion": "Nova versão",
+  "skills.newVersionDescription":
+    "Publicar cria uma nova versão imutável de {slug} sem sobrescrever as anteriores.",
+  "skills.noFiles": "Nenhum arquivo auxiliar nesta versão.",
+  "skills.pinnedUri": "URI da versão fixada",
+  "skills.published": "Publicada {slug} v{version}",
+  "skills.removeFile": "Remover arquivo",
+  "skills.rendered": "SKILL.md renderizado",
+  "skills.slug": "Nome da skill (slug)",
+  "skills.slugHint":
+    "Segue o campo name do Agent Skills e a URI: skill://{slug}/SKILL.md",
+  "skills.title": "Skills",
+  "skills.versionsCount": "{n} versões",
+  "skills.versionsCount_one": "1 versão",
+
+  "setup.code": "Código de configuração",
+  "setup.codeHint":
+    "Aparece no log do servidor ao subir (docker logs keyhall).",
+  "setup.description":
+    "Crie a conta de administrador. Ela é a primeira e única que o cadastro aceita.",
+  "setup.name": "Seu nome",
+  "setup.signInFailed": "Conta criada, mas o login falhou",
+  "setup.submit": "Criar conta",
+  "setup.title": "Configure o keyhall",
+
+  "slug.label": "Identificador",
+  "slug.placeholder": "gerado a partir do nome",
+  "slug.taken": "Este identificador já está em uso.",
+
+  "status.connected": "Conectado",
+  "status.error": "Erro",
+  "status.pending": "Pendente",
+
+  "stdio.config": "Configuração (JSON)",
+  "stdio.editHint":
+    "Variáveis em branco mantêm o valor atual; tirar uma do JSON remove ela. Salvar reinicia o processo.",
+  "stdio.envHint":
+    "As variáveis ficam cifradas no keyhall e só o processo do servidor as recebe.",
+  "stdio.hint":
+    "Cole o trecho mcpServers que a documentação do servidor mostra para Claude Code, Claude Desktop ou Cursor.",
+  "stdio.isRemote": "Este JSON descreve um servidor remoto.",
+  "stdio.runs": "O keyhall roda: {command}",
+  "stdio.secretInArgs":
+    'Um argumento parece conter uma chave. Argumentos ficam sem cifra e aparecem no painel; passe a chave por uma variável em "env".',
+  "stdio.useRemote": "Usar como MCP remoto",
+
+  "theme.dark": "Escuro",
+  "theme.light": "Claro",
+  "theme.system": "Sistema",
+
+  "tokens.access": "Acesso",
+  "tokens.broadWarning":
+    "Acesso total, inclusive a conexões e ferramentas criadas depois. Prefira uma validade.",
+  "tokens.copyNow": "Copie agora: o keyhall não mostra este token de novo.",
+  "tokens.create": "Criar token",
+  "tokens.created": "Token criado",
+  "tokens.createScopeFirst": "Crie um escopo primeiro.",
+  "tokens.days": "{n} dias",
+  "tokens.description":
+    "Um token por consumidor (Claude Code, um bot…). Ele vale para a organização, um projeto ou um escopo.",
+  "tokens.emptyDescription":
+    "Crie um token e cole no seu cliente MCP junto com o endpoint.",
+  "tokens.emptyTitle": "Nenhum token ainda",
+  "tokens.endpoint": "Endpoint MCP",
+  "tokens.endpointHint":
+    "Todos os consumidores usam esta URL, cada um com o seu token.",
+  "tokens.expires": "Expira",
+  "tokens.expiry": "Validade",
+  "tokens.lastUsed": "Último uso",
+  "tokens.mode": "Ferramentas",
+  "tokens.modeChanged":
+    "Modo alterado. Os clientes veem a mudança na próxima vez que listarem as ferramentas.",
+  "tokens.modeCode": "Code Mode",
+  "tokens.modeCodeHint":
+    "Duas ferramentas, search e execute: o agente busca o que precisa e chama por código. O contexto fica pequeno, não importa quantas conexões o token alcance.",
+  "tokens.modeTools": "Todas as ferramentas",
+  "tokens.modeToolsHint":
+    "Cada ferramenta aparece para o cliente. Simples, mas cada conexão pesa no contexto.",
+  "tokens.toCode": "Mudar para Code Mode",
+  "tokens.toTools": "Listar todas as ferramentas",
+  "tokens.levelOrg": "Organização",
+  "tokens.levelOrgHint": "Tudo de {name}.",
+  "tokens.levelProject": "Projeto",
+  "tokens.levelProjectHint": "Tudo de um projeto.",
+  "tokens.levelScope": "Escopo",
+  "tokens.levelScopeHint": "Só as conexões e ferramentas de um escopo.",
+  "tokens.never": "Nunca",
+  "tokens.new": "Novo token",
+  "tokens.newDescription":
+    "Um token por consumidor, para poder revogar cada um separadamente.",
+  "tokens.revoke": "Revogar",
+  "tokens.revokeDescription":
+    "Os consumidores que usam este token perdem o acesso na hora.",
+  "tokens.revokeTitle": "Revogar {name}?",
+  "tokens.scope": "Escopo",
+  "tokens.targetOrg": "Organização {name}",
+  "tokens.targetOtherOrg": "Outra organização",
+  "tokens.targetProject": "Projeto {name}",
+  "tokens.targetRemoved": "Escopo removido",
+  "tokens.targetScope": "Escopo {name}",
+  "tokens.title": "Tokens",
+  "tokens.useIt": "Como usar",
+  "tokens.year": "1 ano",
+
+  "tools.count": "{n} ferramentas",
+  "tools.count_one": "1 ferramenta",
+  "tools.none": "Nenhuma ferramenta encontrada.",
+  "tools.of": "Ferramentas de {name}",
+  "tools.search": "Buscar ferramentas",
+  "nav.secrets": "Secrets",
+  "scopes.secretAgents": "Legível por agentes (MCP) e REST",
+  "scopes.secretCount": "{n} secrets",
+  "scopes.secretCount_one": "1 secret",
+  "scopes.secretRest": "Legível por REST",
+  "scopes.secrets": "Secrets",
+  "vault.agents": "Legível por agentes (MCP)",
+  "vault.agentsHint":
+    "Acrescenta keyhall__get_secret às ferramentas MCP dos tokens que alcançam este secret",
+  "vault.agentsPill": "Agentes",
+  "vault.agentsWarning":
+    "O valor entra no contexto do modelo, passa pelo provedor dele e pode aparecer em logs ou respostas. Prefira referenciar o secret numa conexão, assim ele nunca sai do keyhall.",
+  "vault.clearRef": "Digitar um valor",
+  "vault.current": "atual",
+  "vault.deleteDescription":
+    'As versões e o histórico de leituras também são apagados. Tokens que o liam passam a receber "não encontrado".',
+  "vault.deleteTitle": "Excluir {name}?",
+  "vault.description":
+    "Chaves, senhas e certificados guardados cifrados no keyhall. Conexões referenciam, scripts leem por REST e agentes só quando você libera.",
+  "vault.descriptionLabel": "Descrição",
+  "vault.descriptionPlaceholder": "Para que serve, de quem é",
+  "vault.detailsDescription":
+    "O valor não muda aqui; para isso, use Novo valor.",
+  "vault.editDetails": "Editar detalhes",
+  "vault.emptyDescription":
+    "Guarde uma chave uma vez e use em conexões, scripts e agentes.",
+  "vault.emptyTitle": "Nenhum secret ainda",
+  "vault.hide": "Ocultar",
+  "vault.history": "Histórico",
+  "vault.historyDescription":
+    "Todas as versões e todas as leituras, pelo painel, REST ou MCP.",
+  "vault.keyHint": "digite um valor ou escolha um secret",
+  "vault.nameHint": "Use como {{secret:{name}}}; no formato env vira {name}=…",
+  "vault.nameTaken": "Já existe um secret com este nome neste projeto.",
+  "vault.new": "Novo secret",
+  "vault.newDescription":
+    "O valor é cifrado com uma chave própria, protegida pela chave mestra do servidor.",
+  "vault.newValue": "Novo valor",
+  "vault.noDescription": "Sem descrição",
+  "vault.noneYet": "Nenhum secret nesta organização ainda",
+  "vault.noReads": "Ninguém leu este secret ainda.",
+  "vault.otherProjects": "Outros projetos",
+  "vault.reads": "Leituras",
+  "vault.reveal": "Revelar",
+  "vault.rotate": "Novo valor",
+  "vault.rotated": "{name} atualizado",
+  "vault.rotateDescription":
+    "Salvar cria a versão {version}. As conexões que o referenciam passam a usar o valor novo na hora; as versões anteriores ficam no histórico.",
+  "vault.save": "Salvar secret",
+  "vault.show": "Mostrar",
+  "vault.title": "Secrets",
+  "vault.usageDescription":
+    "Um token lê os secrets da organização, do projeto ou os escolhidos no escopo dele.",
+  "vault.usageEnv": "Como env",
+  "vault.usageMcp":
+    'Os agentes veem duas ferramentas, keyhall__list_secrets e keyhall__get_secret, só para secrets marcados como "Legível por agentes" e dentro do alcance do token. Toda leitura fica registrada.',
+  "vault.usageOne": "Um secret",
+  "vault.usageRefs":
+    "Nas conexões, use o botão do cofre nos campos de chave ou digite {{secret:NOME}} ({{secret:projeto/NOME}} para outro projeto).",
+  "vault.usageTitle": "Como ler os secrets",
+  "vault.usedBy": "usado por {n} conexões",
+  "vault.usedBy_one": "usado por 1 conexão",
+  "vault.useSecret": "Usar um secret",
+  "vault.value": "Valor",
+  "vault.versions": "Versões",
+  "vault.viaPanel": "Painel",
+  "connections.connecting": "Conectando {name}…",
+  "connections.connectingShort": "Conectando…",
+  "connections.redirecting": "Abrindo a página de autorização de {name}…",
+  "connections.restarting": "Reiniciando {name}…",
+  "connections.restartingShort": "Reiniciando…",
+  "tools.loadingFrom": "Carregando as ferramentas de {name}…",
+  "tools.loadingHint":
+    "Pedindo as ferramentas ao servidor. Servidores grandes podem levar alguns segundos.",
+  "tools.matching": "{n} de {total} ferramentas",
+  "tools.noDescription": "Esta ferramenta não tem descrição.",
+  "tools.noParams": "Sem parâmetros.",
+  "tools.params": "Parâmetros",
+  "tools.required": "obrigatório",
+  "invite.create": "Criar conta e entrar",
+  "invite.description":
+    "O convite é para {email}. Crie sua conta para ver o que foi compartilhado com você.",
+  "invite.googleHint": "Use a conta Google de {email}.",
+  "invite.invalid":
+    "Este convite é inválido, expirou ou já foi usado. Peça um link novo.",
+  "invite.join": "Aceitar o convite",
+  "invite.leave": "Continuar sem o convite",
+  "invite.loading": "Abrindo o convite…",
+  "invite.passwordHint": "Pelo menos 8 caracteres.",
+  "invite.title": "Convite para {org}",
+  "invite.wrongAccount":
+    "Você está conectado como {current}, mas este convite é para {email}. Saia e abra o link de novo.",
+  "member.access": "Seu acesso",
+  "member.accessDescription":
+    "O que {org} compartilhou com você. Use com um token ou entrando por um cliente MCP; o admin decide o que aparece aqui e pode mudar a qualquer momento.",
+  "member.accessTitle": "Seu acesso",
+  "member.allTools": "Todas as ferramentas",
+  "member.emptyDescription":
+    "Peça ao admin da organização para liberar conexões, escopos ou secrets.",
+  "member.emptyTitle": "Nada compartilhado com você ainda",
+  "member.nav": "Seu espaço",
+  "member.noneDescription": "Você não é mais membro de nenhuma organização.",
+  "member.noneTitle": "Nenhuma organização",
+  "member.role": "Membro",
+  "member.scopesHint":
+    "Conjuntos prontos de conexões e ferramentas. Um token de escopo alcança só ele.",
+  "nav.team": "Equipe",
+  "team.access": "Acesso",
+  "team.accessDescription":
+    "Escolha o que esta pessoa pode usar: conexões (todas as ferramentas ou só algumas), secrets e escopos. As mudanças valem na próxima chamada dela.",
+  "team.accessHint":
+    "Membros usam o que for liberado aqui, mas nunca veem endereços, headers ou credenciais, e não editam nada.",
+  "team.accessTitle": "Acesso de {name}",
+  "team.active": "Ativo",
+  "team.countConnections": "{n} conexões",
+  "team.countConnections_one": "1 conexão",
+  "team.countScopes": "{n} escopos",
+  "team.countScopes_one": "1 escopo",
+  "team.countSecrets": "{n} secrets",
+  "team.countSecrets_one": "1 secret",
+  "team.createLink": "Criar link de convite",
+  "team.description":
+    "Pessoas convidadas para {org}. Cada uma entra no keyhall e usa só o que você liberar, com os próprios tokens.",
+  "team.email": "E-mail",
+  "team.emptyDescription":
+    "Convide alguém por link e depois escolha quais conexões, ferramentas, escopos e secrets a pessoa pode usar.",
+  "team.emptyTitle": "Ninguém convidado ainda",
+  "team.expired": "Convite expirado",
+  "team.invite": "Convidar",
+  "team.invited": "Convidado",
+  "team.inviteDescription":
+    "O keyhall gera um link para você enviar. A pessoa entra com senha ou com Google, usando este e-mail.",
+  "team.invitedUntil": "Link válido até {date}",
+  "team.inviteTitle": "Convidar para {org}",
+  "team.linkDescription":
+    "Envie este link para a pessoa. Ele funciona uma vez, por 7 dias, e só aparece agora; dá para gerar outro no menu do membro.",
+  "team.linkTitle": "Link de convite",
+  "team.newLink": "Novo link de convite",
+  "team.remove": "Remover",
+  "team.removeDescription":
+    "Os tokens da pessoa param na hora. Se ela não estiver em outra organização, a conta também é apagada.",
+  "team.removeTitle": "Remover {name}?",
+  "team.saved": "Acesso salvo",
+  "team.scopeHint": "Escopo · {n} conexões",
+  "team.scopeHint_one": "Escopo · 1 conexão",
+  "team.scopes": "Escopos",
+  "team.title": "Equipe",
+  "tokens.levelMember": "Meu acesso",
+  "tokens.levelMemberHint":
+    "Tudo o que foi compartilhado com você nesta organização, conforme mudar.",
+  "tokens.targetMember": "Meu acesso",
+  "approvals.approve": "Aprovar",
+  "approvals.approved": "Aprovado",
+  "approvals.deny": "Negar",
+  "approvals.denied": "Negado",
+  "approvals.description":
+    "Chamadas a ferramentas que pedem aprovação. O agente espera {wait} s; depois disso, a aprovação vale para a mesma chamada por {valid} min, uma vez.",
+  "approvals.emptyDescription":
+    "Escolha quais ferramentas pedem aprovação no menu da conexão, em Aprovação.",
+  "approvals.emptyTitle": "Nada esperando",
+  "approvals.history": "Últimas decisões",
+  "approvals.rulesCount": "{n} ferramentas pedem aprovação",
+  "approvals.rulesCount_one": "1 ferramenta pede aprovação",
+  "approvals.rulesDescription":
+    "Cada chamada a uma ferramenta marcada espera um admin, qualquer que seja o token ou o membro. Use no que não tem volta ou fala com o mundo: enviar, apagar, pagar, publicar.",
+  "approvals.rulesMenu": "Aprovação",
+  "approvals.rulesNone": "Nenhuma ferramenta pede aprovação.",
+  "approvals.rulesSaved": "Regras de aprovação salvas",
+  "approvals.rulesTitle": "Aprovação em {name}",
+  "approvals.status.approved": "Aprovada, ainda não usada",
+  "approvals.status.denied": "Negada",
+  "approvals.status.expired": "Expirou",
+  "approvals.status.pending": "Esperando",
+  "approvals.status.used": "Aprovada",
+  "approvals.title": "Aprovações",
+  "approvals.when": "Pedida {at} · vale até {until}",
+  "approvals.who": "Token {token} ({person}) · {connection} em {project}",
+  "nav.approvals": "Aprovações",
+  "approvals.settings": "Tempos",
+  "approvals.settingsSaved": "Tempos salvos",
+  "approvals.settingsDescription":
+    "Para todas as ferramentas que pedem aprovação, em todas as organizações.",
+  "approvals.wait": "Espera (segundos)",
+  "approvals.waitHint":
+    "Quanto a chamada do agente espera uma decisão antes de ele ser orientado a repetir. 0 responde na hora; até {max}, abaixo do limite comum de 60 s dos clientes.",
+  "approvals.valid": "Aprovação vale por (minutos)",
+  "approvals.validHint":
+    "Por quanto tempo a aprovação vale para o agente repetir a chamada, uma vez. Até {max} (24 horas).",
+  "common.edit": "Editar",
+  "common.optional": "opcional",
+  "notify.add": "Adicionar canal",
+  "notify.button": "Notificações",
+  "notify.title": "Notificações",
+  "notify.description":
+    "Onde o keyhall avisa que uma chamada espera aprovação, com um link para aprovar aqui. Todo canal ligado recebe cada pedido novo.",
+  "notify.empty":
+    "Nenhum canal ainda. Adicione Telegram, ntfy, Discord, Slack ou um webhook.",
+  "notify.enabled": "Ligado",
+  "notify.lastSent": "último envio {at}",
+  "notify.neverSent": "nada enviado ainda",
+  "notify.lastError": "falhou: {error}",
+  "notify.withArgs": "Com argumentos",
+  "notify.test": "Enviar um teste",
+  "notify.testSent": "Teste enviado para {name}",
+  "notify.testFailed": "O teste falhou: {error}",
+  "notify.deleteTitle": "Apagar {name}?",
+  "notify.deleteDescription":
+    "O keyhall para de avisar neste canal. O token ou a URL guardados são apagados.",
+  "notify.kind": "Serviço",
+  "notify.namePlaceholder": "Meu celular",
+  "notify.keep": "Guardado; deixe vazio para manter",
+  "notify.includeArgs": "Incluir os argumentos da chamada",
+  "notify.includeArgsHint":
+    "Ajuda a decidir pelo celular, mas os argumentos (texto de e-mail, IDs, valores) saem do keyhall para esse serviço. Desligado por padrão.",
+  "notify.kind.telegram": "Telegram",
+  "notify.kind.ntfy": "ntfy",
+  "notify.kind.discord": "Discord",
+  "notify.kind.slack": "Slack",
+  "notify.kind.webhook": "Webhook",
+  "notify.field.botToken": "Token do bot",
+  "notify.field.chatId": "ID do chat",
+  "notify.field.url": "URL",
+  "notify.field.token": "Token de acesso",
+  "notify.field.webhookUrl": "URL do webhook",
+  "notify.field.secret": "Segredo de assinatura",
+  "notify.help.telegram":
+    "Crie um bot com o @BotFather e cole o token. Para o ID do chat, mande uma mensagem ao bot, abra api.telegram.org/bot<token>/getUpdates e copie chat.id (o de um grupo começa com -).",
+  "notify.help.ntfy":
+    "A URL do tópico, no ntfy.sh ou no seu servidor; depois assine o mesmo tópico no app do ntfy. Escolha um tópico difícil de adivinhar, ou use um token de acesso no seu servidor.",
+  "notify.help.discord":
+    "No canal do Discord: Editar canal → Integrações → Webhooks → Novo webhook → Copiar URL do webhook.",
+  "notify.help.slack":
+    "Crie um incoming webhook para o canal (api.slack.com/messaging/webhooks) e cole a URL.",
+  "notify.help.webhook":
+    "O keyhall faz POST de um JSON (evento approval.requested) nesta URL. Com um segredo, o corpo é assinado com HMAC-SHA256 no header X-Keyhall-Signature.",
+}

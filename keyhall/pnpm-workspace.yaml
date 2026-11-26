@@ -1,0 +1,11 @@
+packages:
+  - server
+  - web
+
+allowBuilds:
+  better-sqlite3: true
+  esbuild: true
+
+# Patched versions of transitive dependencies flagged by pnpm audit.
+overrides:
+  systeminformation: ">=5.33.16"
