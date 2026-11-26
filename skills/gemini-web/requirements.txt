@@ -1,0 +1,3 @@
+# gemini_web.py needs both; the patch of the medium thinking level rewrites a private request layout of this exact version
+gemini-webapi==2.1.1
+browser-cookie3>=0.19.1

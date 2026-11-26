@@ -1,0 +1,28 @@
+{
+  "cases": [
+    {
+      "id": "tag-at-end",
+      "message": "I want to add a cache to my web app's product search endpoint because it feels slow. /expert",
+      "expect": "fires",
+      "judge": "One fenced prompt with the field and nine labeled lines; no file edits; ends by offering to run it."
+    },
+    {
+      "id": "tag-at-start",
+      "message": "/expert write the onboarding email for new users of my note-taking app",
+      "expect": "fires",
+      "judge": "The rewrite is about the onboarding email, not about the skill or a generic task."
+    },
+    {
+      "id": "pt-br-task",
+      "message": "quero refatorar a tela de login do meu app para ficar mais clara e intuitiva, com mensagens de erro que expliquem o que fazer. /expert",
+      "expect": "fires",
+      "judge": "The rewrite is in Portuguese and line 2 names a reference class without inventing a base rate."
+    },
+    {
+      "id": "mentions-experts-no-tag",
+      "message": "What would a UX expert think of a login screen with only email, password and a sign-in button?",
+      "expect": "silent",
+      "judge": "A direct answer to the question; the skill is not called."
+    }
+  ]
+}

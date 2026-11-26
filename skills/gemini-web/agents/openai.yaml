@@ -1,0 +1,3 @@
+interface:
+  display_name: "Gemini web"
+  short_description: "Ask your own Gemini web session: text, files, images, video, Deep Research"
