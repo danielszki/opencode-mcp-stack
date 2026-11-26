@@ -1,0 +1,356 @@
+{
+ "version": "1.0",
+ "note": "Marcas fortes de texto de IA em português do Brasil. O Revisor marca cada termo encontrado e corrige só o trecho; a skill tirar-cara-de-ia usa a mesma lista. Palavras comuns da fala do dia a dia ficam de fora para não marcar texto normal.",
+ "words": [
+  {
+   "find": "potencializar",
+   "replace": "aumentar",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "alavancar",
+   "replace": "aumentar",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "impulsionar",
+   "replace": "ajudar",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "otimizar",
+   "replace": "melhorar",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "maximizar",
+   "replace": "aumentar",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "revolucionar",
+   "replace": "mudar",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "revolucionário",
+   "replace": "novo",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "transformador",
+   "replace": "que muda",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "disruptivo",
+   "replace": "novo",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "inovador",
+   "replace": "novo",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "robusto",
+   "replace": "forte",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "holístico",
+   "replace": "completo",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "sinergia",
+   "replace": "parceria",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "jornada",
+   "replace": "caminho",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "ecossistema",
+   "replace": "conjunto",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "crucial",
+   "replace": "importante",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "fundamental",
+   "replace": "importante",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "primordial",
+   "replace": "importante",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "imprescindível",
+   "replace": "necessário",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "indispensável",
+   "replace": "necessário",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "essencialmente",
+   "replace": "no fundo",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "intrinsecamente",
+   "replace": "no fundo",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "meticuloso",
+   "replace": "cuidadoso",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "minucioso",
+   "replace": "cuidadoso",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "vibrante",
+   "replace": "animado",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "envolvente",
+   "replace": "interessante",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "cativante",
+   "replace": "interessante",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "instigante",
+   "replace": "interessante",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "desbloquear",
+   "replace": "liberar",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "desvendar",
+   "replace": "mostrar",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "mergulhar",
+   "replace": "entrar",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "navegar",
+   "replace": "lidar com",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "empoderar",
+   "replace": "dar força",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "ressignificar",
+   "replace": "rever",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "elevar",
+   "replace": "melhorar",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "catalisador",
+   "replace": "motor",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "paradigma",
+   "replace": "modelo",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "tapeçaria",
+   "replace": "mistura",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "panorama",
+   "replace": "cenário",
+   "family": "palavras de efeito"
+  },
+  {
+   "find": "cenário em constante evolução",
+   "replace": "mercado que muda",
+   "family": "palavras de efeito"
+  }
+ ],
+ "phrases": [
+  {
+   "find": "no mundo acelerado de hoje",
+   "replace": "hoje",
+   "family": "aberturas"
+  },
+  {
+   "find": "no mundo atual",
+   "replace": "hoje",
+   "family": "aberturas"
+  },
+  {
+   "find": "na era digital",
+   "replace": "hoje",
+   "family": "aberturas"
+  },
+  {
+   "find": "nos dias de hoje",
+   "replace": "hoje",
+   "family": "aberturas"
+  },
+  {
+   "find": "em um mundo cada vez mais",
+   "replace": "hoje",
+   "family": "aberturas"
+  },
+  {
+   "find": "você já se perguntou",
+   "replace": "",
+   "family": "aberturas"
+  },
+  {
+   "find": "é importante ressaltar que",
+   "replace": "",
+   "family": "enchimento"
+  },
+  {
+   "find": "vale ressaltar que",
+   "replace": "",
+   "family": "enchimento"
+  },
+  {
+   "find": "vale destacar que",
+   "replace": "",
+   "family": "enchimento"
+  },
+  {
+   "find": "é fundamental entender que",
+   "replace": "",
+   "family": "enchimento"
+  },
+  {
+   "find": "não é segredo que",
+   "replace": "",
+   "family": "enchimento"
+  },
+  {
+   "find": "como todos sabemos",
+   "replace": "",
+   "family": "enchimento"
+  },
+  {
+   "find": "sem sombra de dúvidas",
+   "replace": "com certeza",
+   "family": "enchimento"
+  },
+  {
+   "find": "mais do que nunca",
+   "replace": "agora",
+   "family": "enchimento"
+  },
+  {
+   "find": "dar o próximo passo",
+   "replace": "seguir",
+   "family": "enchimento"
+  },
+  {
+   "find": "leve seu negócio ao próximo nível",
+   "replace": "faça seu negócio crescer",
+   "family": "enchimento"
+  },
+  {
+   "find": "ao próximo nível",
+   "replace": "mais longe",
+   "family": "enchimento"
+  },
+  {
+   "find": "faça a diferença",
+   "replace": "ajude",
+   "family": "enchimento"
+  },
+  {
+   "find": "fique por dentro",
+   "replace": "veja",
+   "family": "enchimento"
+  },
+  {
+   "find": "descubra como",
+   "replace": "veja como",
+   "family": "enchimento"
+  },
+  {
+   "find": "em resumo",
+   "replace": "",
+   "family": "fechamentos"
+  },
+  {
+   "find": "em suma",
+   "replace": "",
+   "family": "fechamentos"
+  },
+  {
+   "find": "concluindo",
+   "replace": "",
+   "family": "fechamentos"
+  },
+  {
+   "find": "por fim, mas não menos importante",
+   "replace": "por fim",
+   "family": "fechamentos"
+  },
+  {
+   "find": "e aí, o que você acha?",
+   "replace": "",
+   "family": "fechamentos"
+  },
+  {
+   "find": "espero que este conteúdo",
+   "replace": "",
+   "family": "fechamentos"
+  }
+ ],
+ "structures": [
+  {
+   "name": "não é X, é Y",
+   "regex": "(?i)\\bn[ãa]o [ée] (s[óo] |apenas )?[^.,;\\n]{2,40}[,;]? [ée] "
+  },
+  {
+   "name": "não se trata de X, mas de Y",
+   "regex": "(?i)\\bn[ãa]o se trata (apenas )?de\\b"
+  },
+  {
+   "name": "pergunta retórica e resposta",
+   "regex": "(?i)\\b(o resultado|a resposta|o segredo)\\?\\s"
+  },
+  {
+   "name": "mais do que um X",
+   "regex": "(?i)\\bmais (do )?que (um|uma) [a-zà-ú]+, [ée] "
+  }
+ ]
+}
