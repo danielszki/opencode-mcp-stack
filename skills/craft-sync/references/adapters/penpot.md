@@ -1,0 +1,19 @@
+# Adapter: Penpot
+
+Use the [official Penpot MCP server](https://help.penpot.app/mcp/). Open the target design file and connect it from the Penpot MCP menu (remote) or the MCP plugin (local). Keep that tab open. Run `high_level_overview` for API guidance, then verify `penpot.currentFile` and `penpot.currentPage` names and IDs in a read-only `execute_code` call before editing. Use the intended Penpot session on each call when the server supports session selection. Otherwise keep only the target file connected. If the target disconnects, reconnect and verify it again. Use `penpot_api_info` and check availability in the connected plugin before relying on version-dependent API members.
+
+Pages must be active before building on them. After `penpot.createPage()`, set the name and await `penpot.openPage(page)` if available. Otherwise switch to the page in Penpot and verify `penpot.currentPage.id` in a new call. Use the same check when returning to an existing page.
+
+| Skill verb | In Penpot |
+|---|---|
+| Register tokens (import) | Inspect `penpot.library.local.tokens` first, including its sets and active themes. A name that already exists **with a different value is a conflict** for the inventory stop, never a silent overwrite. Write only in the owning file's editable catalog: reuse the agreed set or create it with `catalog.addSet({ name })`, then register supported values with `set.addToken({ type, name, value })` under the code's names, kept exactly (`--color-accent`). Penpot names may contain letters, digits, `-`, `_` and `$` (not first); a `.` starts a token group. Activate the set when agreed, then read back the token values and bindings before recording the sync. |
+| Guide page | Create or reuse a `Guide` page. Add foundation boards, a component index and boards for the selected components with editable, token-bound shapes. |
+| Draw a component | Create local main components with `penpot.library.local.createComponent([board])`. Where supported, combine their `mainInstance()` boards with `penpot.createVariantFromComponents` and set the property names and values from the code's variant map. Label states absent from code as **proposed** on the guide. |
+| Read guide values (export) | Read the agreed sets and themes, token names, types, stored values and resolved values via `execute_code`. Read variant properties on the main components. Compare values in the intended theme, preserving alias relationships where source supports them. |
+| Look at it | Call `export_shape` with the board's ID as `shapeId` and `format: "png"` in a separate call after editing. Inspect the returned image. If export fails, use an available canvas screenshot or report the visual check as incomplete. |
+
+In `design-sync.json`, `naming` stays "CSS custom property names as written in the source" and `tool` is a short label such as `penpot: file 'Fieldnote', page 'Guide', set 'base'`. Treat equal names in different sets as ambiguous until the intended theme or set is known.
+
+After an approved token update, compare the token's resolved value with the affected shape properties in a fresh call. If the binding still points to the token but the property is stale, refresh that property using the token. In Penpot 2.19.1, `applyToken` toggles an existing binding off. Verify the property is unbound before applying the token again, then read back both the binding and the property. Report any affected shapes that still need a refresh.
+
+If the catalog API or a type is unavailable, use Penpot's [Design Tokens import/export](https://help.penpot.app/user-guide/design-systems/design-tokens/) for supported tokens and re-read the result before recording it as synced. Keep unregistered values labelled in the guide and out of the agreed token baseline. Apply code changes through the normal reviewed export flow.
